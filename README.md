@@ -34,6 +34,8 @@
 
 项目地址：[srcrs/UnicomTask](https://github.com/srcrs/UnicomTask)
 
+![](https://draw-static.vercel.app/UnicomTask/fork本项目.gif)
+
 ## 2.准备需要的参数
 
 手机号、服务密码、appID。
@@ -57,15 +59,21 @@ APPID_COVER | xxxxxxxxx | appId(必须)
 EMAIL_COVER | xxxxx@qq.com | 邮箱(可选)
 LOTTERY_NUM | 填写正整数 | 抽奖次数(可选)
 
-## 4.开启actions
+![](https://draw-static.vercel.app/UnicomTask/将参数填到Secrets中.gif)
 
-默认`actions`处于禁止状态，在`Actions`选项中开启`Actions`功能，把那个绿色的长按钮点一下。如果看到左侧工作流上有黄色`!`号，还需继续开启。
+## 4.开启Actions
+
+默认`Actions`处于禁止状态，在`Actions`选项中开启`Actions`功能，把那个绿色的长按钮点一下。如果看到左侧工作流上有黄色`!`号，还需继续开启。
+
+![](https://draw-static.vercel.app/UnicomTask/开启Actions.gif)
 
 ## 5.进行一次push操作
 
 `push`操作会触发工作流运行。
 
 删除掉`README.md`中的😄即可。完成后，每天早上`7:30`将自动完成每日任务。
+
+![](https://draw-static.vercel.app/UnicomTask/进行一次push操作.gif)
 
 # 同步上游代码
 

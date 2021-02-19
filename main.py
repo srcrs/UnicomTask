@@ -43,7 +43,7 @@ def woTree_task():
         print(traceback.format_exc())
         logging.error('【沃之树】: 错误，原因为: ' + str(e))
 
-#有一些问题，暂时还是出现加倍失败的情况
+#经多次测试，都可加倍成功了
 #每日签到，1积分 +4 积分(翻倍)，第七天得到 1G 日包
 #位置: 我的 --> 我的金币
 def daySign_task():
@@ -64,8 +64,6 @@ def daySign_task():
         doubleAd = client.post('https://act.10010.com/SigninApp/signin/bannerAdPlayingLogo')
         client.headers.pop('referer')
         doubleAd.encoding='utf-8'
-        #暂时添加上这一项留作观察
-        print('留作观察，做测试----->' + doubleAd.text)
         res1 = daySign.json()
         res2 = doubleAd.json()
         if res1['status'] == '0000':
@@ -274,8 +272,6 @@ def dongaoPoints_task():
         print(traceback.format_exc())
         logging.error('【东奥积分活动】: 错误，原因为: ' + str(e))
 
-    
-
 if __name__ == '__main__':
     if client != False:
         daySign_task()
@@ -289,4 +285,3 @@ if __name__ == '__main__':
         collectFlow_task()
     if len(os.environ.get('EMAIL_COVER')) != 0:
         notify.sendEmail()
-
