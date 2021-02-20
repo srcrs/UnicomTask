@@ -1,42 +1,57 @@
-name: auto_merge
+name: UnicomTask
 
 on:
+  push:
+    branches: main
+  gollum:
   workflow_dispatch:
   schedule:
-    - cron: '0 8 * * fri'
-    # cron表达式,每周五16点执行一次，actions任务时区为UTC时区。 
-
+    - cron: '30 23 * * *'
 
 jobs:
-  merge:
-    runs-on: ubuntu-latest
-    steps:
-    - name: Checkout
-      uses: actions/checkout@v2
-      with:
-        ref: main
-        fetch-depth: 0
-        lfs: true
+  deploy:
 
-    - name: Set git identity
-      run : |
-        git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
-        git config --global user.name "github-actions[bot]"
-    - name: Load upstream commits
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.x'
+    - uses: actions/cache@v2
+      with:
+        path: ~/.cache/pip
+        key: ${{ runner.os }}-pip-${{ hashFiles('**/run_in_Actions/requirements.txt') }}
+        restore-keys: |
+          ${{ runner.os }}-pip-
+    - name: Install dependencies
       run: |
-        git pull https://github.com/srcrs/UnicomTask.git --log --no-commit
-    - name: Apply commit changes
-      run: |
-        if [ -f ./.git/MERGE_MSG ]; then
-        mkdir ./tmp && cp ./.git/MERGE_MSG ./tmp/message
-        sed -i "1c [bot] AutoMerging: merge all upstream's changes:" ./tmp/message
-        sed -i '/^\#.*/d' ./tmp/message
-        git commit --file="./tmp/message"
-        else
-        echo "There is no merge commits."
-        fi
-    - name: Push Commits
+        pip install -r requirements.txt
+    - name: Build and publish
       env:
-        DOWNSTREAM_BRANCH: main
-        TZ: Asia/Shanghai
-      run: git push origin $DOWNSTREAM_BRANCH
+        USERNAME_COVER: ${{ secrets.USERNAME_COVER }}
+        PASSWORD_COVER: ${{ secrets.PASSWORD_COVER }}
+        APPID_COVER: ${{secrets.APPID_COVER}}
+        EMAIL_COVER: ${{secrets.EMAIL_COVER}}
+        LOTTERY_NUM: ${{secrets.LOTTERY_NUM}}
+      run: |
+        python main.py
+    - name: Build and publish 2
+      env:
+        USERNAME_COVER: ${{ secrets.USERNAME_COVER_2 }}
+        PASSWORD_COVER: ${{ secrets.PASSWORD_COVER }}
+        APPID_COVER: ${{secrets.APPID_COVER}}
+        EMAIL_COVER: ${{secrets.EMAIL_COVER}}
+        LOTTERY_NUM: ${{secrets.LOTTERY_NUM}}
+      run: |
+        python main.py
+    - name: Build and publish 3
+      env:
+        USERNAME_COVER: ${{ secrets.USERNAME_COVER_3 }}
+        PASSWORD_COVER: ${{ secrets.PASSWORD_COVER }}
+        APPID_COVER: ${{secrets.APPID_COVER}}
+        EMAIL_COVER: ${{secrets.EMAIL_COVER}}
+        LOTTERY_NUM: ${{secrets.LOTTERY_NUM}}
+      run: |
+        python main.py
