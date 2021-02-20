@@ -20,7 +20,7 @@
 * [x] 沃之树领流量、浇水(12M日流量)
 * [x] 每日签到(1积分+翻倍4积分+第七天1G流量日包)
 * [x] 天天抽奖，每天三次免费机会(随机奖励)
-* [x] 游戏中心每日打卡(连续打卡，积分递增至最高7，第七天获得1G流量日包)
+* [x] 游戏中心每日打卡(连续打卡，积分递增至最高7，第七天1G流量日包)
 * [x] 游戏中心宝箱100M任务(100M日流量+随机奖励并翻倍)
 * [x] 4G流量包看视频、下软件任务(90M+150M七日流量)
 * [x] 每日领取100定向积分 
@@ -34,6 +34,8 @@
 
 项目地址：[srcrs/UnicomTask](https://github.com/srcrs/UnicomTask)
 
+![](https://draw-static.vercel.app/UnicomTask/fork本项目.gif)
+
 ## 2.准备需要的参数
 
 手机号、服务密码、appID。
@@ -42,7 +44,7 @@
 
 + 安卓用户可在文件管理 --> Unicom/appid 文件中获取。
 
-+ 苹果用户可抓取客户端登录接口获取
++ 苹果用户可抓取客户端登录接口获取。
 > `https://m.client.10010.com/mobileService/login.htm`
  
 ## 3.将必要参数填到Secrets
@@ -57,10 +59,13 @@ APPID_COVER | xxxxxxxxx | appId(必须)
 EMAIL_COVER | xxxxx@qq.com | 邮箱(可选)
 LOTTERY_NUM | 填写正整数 | 抽奖次数(可选)
 
+![](https://draw-static.vercel.app/UnicomTask/将参数填到Secrets中.gif)
 
-## 4.开启actions
+## 4.开启Actions
 
-默认`actions`处于禁止状态，在`Actions`选项中开启`Actions`功能，把那个绿色的长按钮点一下。如果看到左侧工作流上有黄色`!`号，还需继续开启。
+默认`Actions`处于禁止状态，在`Actions`选项中开启`Actions`功能，把那个绿色的长按钮点一下。如果看到左侧工作流上有黄色`!`号，还需继续开启。
+
+![](https://draw-static.vercel.app/UnicomTask/开启Actions.gif)
 
 ## 5.进行一次push操作
 
@@ -68,10 +73,17 @@ LOTTERY_NUM | 填写正整数 | 抽奖次数(可选)
 
 删除掉`README.md`中的即可。完成后，每天早上`7:30`将自动完成每日任务。
 
+![](https://draw-static.vercel.app/UnicomTask/进行一次push操作.gif)
+
+# 同步上游代码
+
+在最新的代码中，已经加上自动同步上游代码的action，将会定时在每周五16点执行，文件地址在`.github/workflows/auto_merge.yml`。
+
+同时您也可以安装[pull](https://github.com/apps/pull)应用，也可实现自动同步上游代码。
+
 # 申明
 
 本项目仅用于学习。
-
 
 # 参考项目
 

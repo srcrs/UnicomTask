@@ -119,6 +119,7 @@ def login():
         result = response.json()
         if result['code'] == '0':
             logger.info('【登录】: ' + result['default'][-4:])
+            session.headers.update({'User-Agent': 'Mozilla/5.0 (iPad; CPU OS 14_0_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148 unicom{version:iphone_c@8.0100}{systemVersion:dis}{yw_code:}'})
             flag = True
         else:
             logger.info('【登录】: ' + result['dsc'])

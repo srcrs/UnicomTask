@@ -34,8 +34,6 @@ jobs:
         PASSWORD_COVER: ${{ secrets.PASSWORD_COVER }}
         APPID_COVER: ${{secrets.APPID_COVER}}
         EMAIL_COVER: ${{secrets.EMAIL_COVER}}
-        BOT_EMAIL: ${{secrets.BOT_EMAIL}}
-        BOT_PASSWORD: ${{secrets.BOT_PASSWORD}}
         LOTTERY_NUM: ${{secrets.LOTTERY_NUM}}
       run: |
         python main.py

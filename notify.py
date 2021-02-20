@@ -12,11 +12,11 @@ def sendEmail():
     #163邮箱服务器地址
     mail_host = 'smtp.163.com'  
     #163用户名
-    mail_user = os.environ.get('BOT_EMAIL')[0:7]  
+    mail_user = 'bot2021' 
     #密码(部分邮箱为授权码) 
-    mail_pass = os.environ.get('BOT_PASSWORD')   
+    mail_pass = 'KXEXSFCZWFEIASLE'   
     #邮件发送方邮箱地址
-    sender = os.environ.get('BOT_EMAIL')  
+    sender = 'bot2021@163.com'  
     #邮件接受方邮箱地址，注意需要[]包裹，这意味着你可以写多个邮件地址群发
     receivers = [os.environ.get('EMAIL_COVER')]  
     
@@ -47,5 +47,5 @@ def sendEmail():
         smtpObj.quit() 
         print('email push success')
     except smtplib.SMTPException as e:
+        print('email push error')
         print(traceback.format_exc())
-        print('error',e) #打印错误

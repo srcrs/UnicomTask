@@ -21,9 +21,6 @@ def woTree_task():
     #领取4M流量*3
     try:
         flowList = get_woTree_glowList()
-        client.post('https://m.client.10010.com/mactivity/stealingEnergy/engerSign.htm')
-        client.post('https://m.client.10010.com/mactivity/arbordayJson/index.htm')
-        client.post('https://m.client.10010.com/mactivity/arbordayJson/bord')
         num = 1
         for flow in flowList:
             takeFlow = client.get('https://m.client.10010.com/mactivity/flowData/takeFlow.htm?flowId=' + flow['id'])
@@ -36,6 +33,7 @@ def woTree_task():
             #等待1秒钟
             time.sleep(1)
             num = num + 1
+        client.post('https://m.client.10010.com/mactivity/arbordayJson/getChanceByIndex.htm?index=0')
         #浇水
         grow = client.post('https://m.client.10010.com/mactivity/arbordayJson/arbor/3/0/3/grow.htm')
         grow.encoding='utf-8'
@@ -45,19 +43,16 @@ def woTree_task():
         print(traceback.format_exc())
         logging.error('【沃之树】: 错误，原因为: ' + str(e))
 
-#有一些问题，暂时还是出现加倍失败的情况
+#经多次测试，都可加倍成功了
 #每日签到，1积分 +4 积分(翻倍)，第七天得到 1G 日包
 #位置: 我的 --> 我的金币
 def daySign_task():
-    data = {
-        'yw_code': '',
-        'desmobile': os.environ.get('USERNAME_COVER'),
-        'version': 'android@8.0100'
-    }
     try:
-        client.get('https://act.10010.com/SigninApp/signin/querySigninActivity.htm?yw_code=&desmobile=' 
-        + str(os.environ.get('USERNAME_COVER')) + '&version=android@8.0100')
-        client.get('https://act.10010.com/SigninApp/signin/querySigninActivity.htm?token=' + client.cookies.get('a_token'))
+        #参考同类项目 HiCnUnicom 待明日验证是否能加倍成功
+        client.headers.update({'referer': 'https://img.client.10010.com/activitys/member/index.html'})
+        param = 'yw_code=&desmobile=' + os.environ.get('USERNAME_COVER') + '&version=android@$8.0100'
+        client.get('https://act.10010.com/SigninApp/signin/querySigninActivity.htm?' + param)
+        client.headers.update({'referer': 'https://act.10010.com/SigninApp/signin/querySigninActivity.htm?' + param})
         daySign = client.post('https://act.10010.com/SigninApp/signin/daySign')
         daySign.encoding='utf-8'
         #本来是不想加这个的，但是会出现加倍失败的状况，暂时加上也是有可能出问题
@@ -67,9 +62,8 @@ def daySign_task():
         client.post('https://act.10010.com/SigninApp/signin/getIntegral')
         client.post('https://act.10010.com/SigninApp/signin/getGoldTotal')
         doubleAd = client.post('https://act.10010.com/SigninApp/signin/bannerAdPlayingLogo')
+        client.headers.pop('referer')
         doubleAd.encoding='utf-8'
-        #暂时添加上这一项留作观察
-        print('留作观察，做测试----->' + doubleAd.text)
         res1 = daySign.json()
         res2 = doubleAd.json()
         if res1['status'] == '0000':
@@ -103,6 +97,8 @@ def luckDraw_task():
             luck.encoding='utf-8'
             res = luck.json()
             logging.info('【天天抽奖】: ' + res['RspMsg'] + ' x' + str(i+1))
+            #等待1秒钟
+            time.sleep(1)
     except Exception as e:
         print(traceback.format_exc())
         logging.error('【每日签到】: 错误，原因为: ' + str(e))
@@ -111,7 +107,9 @@ def luckDraw_task():
 #位置: 首页 --> 游戏 --> 每日打卡
 def gameCenterSign_Task():
     data1 = {
-        'methodType': 'signin'
+        'methodType': 'signin',
+        'clientVersion': '8.0100',
+        'deviceType': 'Android'
     }
     data2 = {
         'methodType': 'iOSIntegralGet',
@@ -119,14 +117,6 @@ def gameCenterSign_Task():
         'deviceType': 'iOS'
     }
     try:
-        #游戏频道积分
-        gameCenter_exp = client.post('https://m.client.10010.com/producGameApp',data=data2)
-        gameCenter_exp.encoding='utf-8'
-        res1 = gameCenter_exp.json()
-        if res1['code'] == '0000':
-            logging.info('【游戏频道打卡】: 获得' + str(res1['integralNum']) + '积分')
-        else:
-            logging.info('【游戏频道打卡】: ' + res1['msg'])
         #游戏任务积分
         gameCenter = client.post('https://m.client.10010.com/producGame_signin', data=data1)
         gameCenter.encoding='utf-8'
@@ -135,6 +125,16 @@ def gameCenterSign_Task():
             logging.info('【游戏中心签到】: ' + '获得' + str(res['currentIntegral']) + '积分')
         elif res['respCode'] == '0000':
             logging.info('【游戏中心签到】: ' + res['respDesc'])
+        #等待1秒钟
+        time.sleep(1)
+        #游戏频道积分
+        gameCenter_exp = client.post('https://m.client.10010.com/producGameApp',data=data2)
+        gameCenter_exp.encoding='utf-8'
+        res1 = gameCenter_exp.json()
+        if res1['code'] == '0000':
+            logging.info('【游戏频道打卡】: 获得' + str(res1['integralNum']) + '积分')
+        else:
+            logging.info('【游戏频道打卡】: ' + res1['msg'])
     except Exception as e:
         print(traceback.format_exc())
         logging.error('【游戏中心签到】: 错误，原因为: ' + str(e))
@@ -164,6 +164,8 @@ def openBox_task():
         #观看视频领取更多奖励
         watchAd = client.post('https://m.client.10010.com/game_box', data=data2)
         watchAd.encoding='utf-8'
+        #等待1秒钟
+        time.sleep(1)
         #完成任务领取100M流量
         drawReward = client.post('https://m.client.10010.com/producGameTaskCenter', data=data3)
         drawReward.encoding='utf-8'
@@ -196,6 +198,8 @@ def collectFlow_task():
                 logging.info('【4G流量包-看视频】: 获得' + res1['addNum'] + 'M流量 x' + str(i+1))
             elif res1['reason'] == '01':
                 logging.info('【4G流量包-看视频】: 已完成' + ' x' + str(i+1))
+            #等待1秒钟
+            time.sleep(1)
             #下软件
             downloadProg = client.post('https://act.10010.com/SigninApp/mySignin/addFlow',data2)
             downloadProg.encoding='utf-8'
@@ -204,6 +208,8 @@ def collectFlow_task():
                 logging.info('【4G流量包-下软件】: 获得' + res2['addNum'] + 'M流量 x' + str(i+1))
             elif res2['reason'] == '01':
                 logging.info('【4G流量包-下软件】: 已完成' + ' x' + str(i+1))
+            #等待1秒钟
+            time.sleep(1)
     except Exception as e:
         print(traceback.format_exc())
         logging.error('【4G流量包】: 错误，原因为: ' + str(e))
@@ -236,9 +242,9 @@ def pointsLottery_task():
         logging.info("【积分抽奖】: " + res1['RspMsg'] + ' x免费')
         num = 0
         #如果用户未设置此值，将不会自动抽奖
-        if os.environ.get('LOTTERY_NUM') != None:
-            num = os.environ.get('LOTTERY_NUM')
-        for i in range(int(num)):
+        if len(os.environ.get('LOTTERY_NUM')) != 0:
+            num = int(os.environ.get('LOTTERY_NUM'))
+        for i in range(num):
             #用积分兑换抽奖机会
             client.get('https://m.client.10010.com/dailylottery/static/integral/duihuan?goldnumber=10&banrate=30&usernumberofjsp=' + numjsp)
             #进行抽奖
@@ -246,6 +252,8 @@ def pointsLottery_task():
             payx.encoding = 'utf-8'
             res2 = payx.json()
             logging.info("【积分抽奖】: " + res2['RspMsg'] + ' x' + str(i+1))
+            #等待1秒钟
+            time.sleep(1)
     except Exception as e:
         print(traceback.format_exc())
         logging.error('【积分抽奖】: 错误，原因为: ' + str(e))
@@ -256,7 +264,7 @@ def dongaoPoints_task():
     data = {
         'from': random.choice('123456789') + ''.join(random.choice('0123456789') for i in range(10))
     }
-    trance = [0,600,300,300,300,300,300,600]
+    trance = [600,300,300,300,300,300,300]
     try:
         #领取积分奖励
         dongaoPoint = client.post('https://m.client.10010.com/welfare-mall-front/mobile/winterTwo/getIntegral/v1', data=data)
@@ -268,28 +276,27 @@ def dongaoPoints_task():
         res2 = dongaoNum.json()
         #领取成功
         if res1['resdata']['code'] == '0000':
-            logging.info('【东奥积分活动】: ' + res1['resdata']['desc'] + '，' + str(trance[int(res2['resdata']['signDays'])]) + '积分')
+            #当前为连续签到的第几天
+            day = int(res2['resdata']['signDays'])
+            #签到得到的积分
+            point = trance[day%7] + 300 if day==1 else trance[day%7]
+            logging.info('【东奥积分活动】: ' + res1['resdata']['desc'] + '，' + str(point) + '积分')
         else:
             logging.info('【东奥积分活动】: ' + res1['resdata']['desc'] + '，' + res2['resdata']['desc'])
     except Exception as e:
         print(traceback.format_exc())
         logging.error('【东奥积分活动】: 错误，原因为: ' + str(e))
 
-    
-
 if __name__ == '__main__':
     if client != False:
-        dongaoPoints_task()
+        daySign_task()
+        luckDraw_task()
+        pointsLottery_task()
         gameCenterSign_Task()
         day100Integral_task()
         dongaoPoints_task()
-        pointsLottery_task()
-        daySign_task()
-        gameCenterSign_Task()
         woTree_task()
-        luckDraw_task()
         openBox_task()
         collectFlow_task()
-    if os.environ.get('EMAIL_COVER') != None:
+    if len(os.environ.get('EMAIL_COVER')) != 0:
         notify.sendEmail()
-
