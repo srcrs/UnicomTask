@@ -32,8 +32,9 @@ jobs:
       env:
         USERNAME_COVER: ${{ secrets.USERNAME_COVER }}
         PASSWORD_COVER: ${{ secrets.PASSWORD_COVER }}
-        APPID_COVER: ${{secrets.APPID_COVER}}
-        EMAIL_COVER: ${{secrets.EMAIL_COVER}}
-        LOTTERY_NUM: ${{secrets.LOTTERY_NUM}}
+        APPID_COVER: ${{ secrets.APPID_COVER }}
+        EMAIL_COVER: ${{ secrets.EMAIL_COVER }}
+        LOTTERY_NUM: ${{ secrets.LOTTERY_NUM }}
+        DINGTALK_WEBHOOK: ${{ secrets.DINGTALK_WEBHOOK }}
       run: |
         python main.py
