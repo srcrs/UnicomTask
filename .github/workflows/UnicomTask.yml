@@ -40,3 +40,46 @@ jobs:
         DINGTALK_WEBHOOK: ${{ secrets.DINGTALK_WEBHOOK }}
       run: |
         python main.py
+    - name: Build and publish2
+      env:
+        USERNAME_COVER: ${{ secrets.USERNAME_COVER2 }}
+        PASSWORD_COVER: ${{ secrets.PASSWORD_COVER }}
+        APPID_COVER: ${{ secrets.APPID_COVER }}
+        EMAIL_COVER: ${{ secrets.EMAIL_COVER }}
+        LOTTERY_NUM: ${{ secrets.LOTTERY_NUM }}
+        DINGTALK_WEBHOOK: ${{ secrets.DINGTALK_WEBHOOK }}
+      run: |
+        python main.py
+        
+    - name: Build and publish3
+      env:
+        USERNAME_COVER: ${{ secrets.USERNAME_COVER3 }}
+        PASSWORD_COVER: ${{ secrets.PASSWORD_COVER }}
+        APPID_COVER: ${{ secrets.APPID_COVER }}
+        EMAIL_COVER: ${{ secrets.EMAIL_COVER }}
+        LOTTERY_NUM: ${{ secrets.LOTTERY_NUM }}
+        DINGTALK_WEBHOOK: ${{ secrets.DINGTALK_WEBHOOK }}
+      run: |
+        python main.py
+        
+    - name: Build and publish
+      env:
+        USERNAME_COVER: ${{ secrets.USERNAME_COVER4 }}
+        PASSWORD_COVER: ${{ secrets.PASSWORD_COVER }}
+        APPID_COVER: ${{ secrets.APPID_COVER }}
+        EMAIL_COVER: ${{ secrets.EMAIL_COVER }}
+        LOTTERY_NUM: ${{ secrets.LOTTERY_NUM }}
+        DINGTALK_WEBHOOK: ${{ secrets.DINGTALK_WEBHOOK }}
+      run: |
+        python main.py
+        
+    - name: Build and publish
+      env:
+        USERNAME_COVER: ${{ secrets.USERNAME_COVER5 }}
+        PASSWORD_COVER: ${{ secrets.PASSWORD_COVER }}
+        APPID_COVER: ${{ secrets.APPID_COVER }}
+        EMAIL_COVER: ${{ secrets.EMAIL_COVER }}
+        LOTTERY_NUM: ${{ secrets.LOTTERY_NUM }}
+        DINGTALK_WEBHOOK: ${{ secrets.DINGTALK_WEBHOOK }}
+      run: |
+        python main.py
