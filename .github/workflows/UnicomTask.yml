@@ -36,6 +36,7 @@ jobs:
         EMAIL_COVER: ${{ secrets.EMAIL_COVER }}
         LOTTERY_NUM: ${{ secrets.LOTTERY_NUM }}
         DINGTALK_WEBHOOK: ${{ secrets.DINGTALK_WEBHOOK }}
+        DINGTALK_WEBHOOK: ${{ secrets.DINGTALK_WEBHOOK }}
       run: |
         python main.py
     - name: Build and publish 2
