@@ -47,7 +47,6 @@ def sendTg():
     #发送内容
     content = readFile('log.txt')
     data = {
-            'title': 'UnicomTask每日报表',
             'text': content
     }
     content = urllib.parse.urlencode(data)
