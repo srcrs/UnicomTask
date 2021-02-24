@@ -46,16 +46,12 @@ def sendDing():
 def sendTg():
     #发送内容
     content = readFile('log.txt')
-    data = {
-            'text': content
-    }
-    content = urllib.parse.urlencode(data)
+    data = urllib.parse.urlencode(data)
     #TG_BOT的token
     token = os.environ.get('TG_TOKEN')
     #用户的ID
     chat_id = os.environ.get('TG_USERID')
-    url = f'https://api.telegram.org/bot{token}/sendMessage?chat_id={chat_id}&text={content}'
-    #url = f'https://api.telegram.org/bot{token}/sendMessage?chat_id={chat_id}&text={data}}'
+    url = f'https://api.telegram.org/bot{token}/sendMessage?chat_id={chat_id}&text={data}'
     print(url)
     session = requests.Session()
     resp = session.post(url)
