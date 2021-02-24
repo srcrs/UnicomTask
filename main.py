@@ -103,7 +103,7 @@ def luckDraw_task():
             time.sleep(1)
     except Exception as e:
         print(traceback.format_exc())
-        logging.error('【每日签到】: 错误，原因为: ' + str(e))
+        logging.error('【天天抽奖】: 错误，原因为: ' + str(e))
 
 #游戏任务中心每日打卡领积分，游戏任务自然数递增至7，游戏频道每日1积分
 #位置: 首页 --> 游戏 --> 每日打卡
