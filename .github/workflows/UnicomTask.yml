@@ -38,5 +38,7 @@ jobs:
         EMAIL_COVER: ${{ secrets.EMAIL_COVER }}
         LOTTERY_NUM: ${{ secrets.LOTTERY_NUM }}
         DINGTALK_WEBHOOK: ${{ secrets.DINGTALK_WEBHOOK }}
+        TG_TOKEN: ${{ secrets.TG_TOKEN }}
+        TG_USERID: ${{ secrets.TG_USERID }}
       run: |
         python main.py
