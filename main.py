@@ -313,3 +313,5 @@ if __name__ == '__main__':
         notify.sendEmail()
     if len(os.environ.get('DINGTALK_WEBHOOK')) !=0:
         notify.sendDing()
+    if len(os.environ.get('SCKEY')) !=0:
+        notify.server()
