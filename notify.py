@@ -43,6 +43,16 @@ def sendDing():
         print('dinngTalk push error : ' + res['errmsg'])
 
 
+ #server酱
+def server():
+    content = readFile('log.txt')
+    # sckey="SCU24351Te1f6fe018b0badc5f20d7325b106bcbb5ac82f8355ab0"
+    sckey = os.environ.get('SCKEY')
+    url = 'https://sc.ftqq.com/' + sckey + '.send'
+    data = {'text':'UnicomTask每日报表','desp':content}
+    data = {'text':'联通签到每日报表','desp':content}
+    result = requests.post(url,data)
+    return(result)
 '''
 #参考自文章 https://zhuanlan.zhihu.com/p/24180606 用python发送邮件
 def sendEmail():
