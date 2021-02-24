@@ -47,11 +47,8 @@ def sendTg():
     #发送内容
     content = readFile('log.txt')
     data = {
-        'msgtype': 'markdown',
-        'markdown': {
             'title': 'UnicomTask每日报表',
             'text': content
-        }
     }
     content = urllib.parse.urlencode(data)
     #TG_BOT的token
