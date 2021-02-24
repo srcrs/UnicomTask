@@ -46,10 +46,11 @@ def sendDing():
 def sendTg():
     #发送内容
     content = readFile('log.txt')
-    data = {
+    message = {
             'UnicomTask每日报表',
             content
            }
+    data = $(echo $message | sed -e ':a;N;$!ba;s/\n/%0a/g' -e 's/&/%26/g')
     #TG_BOT的token
     token = os.environ.get('TG_TOKEN')
     #用户的ID
