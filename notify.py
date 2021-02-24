@@ -57,7 +57,7 @@ def sendTg():
     token = os.environ.get('TG_TOKEN')
     #用户的ID
     chat_id = os.environ.get('TG_USERID')
-    url = f'https://api.telegram.org/bot{token}/sendMessage?chat_id={chat_id}&text={data}}'
+    url = f'https://api.telegram.org/bot{token}/sendMessage?chat_id={chat_id}&text={data}'
     print(url)
     session = requests.Session()
     resp = session.post(url)
