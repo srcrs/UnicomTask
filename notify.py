@@ -47,7 +47,8 @@ def sendTg():
     #发送内容
     content = readFile('log.txt')
     data = {
-        {
+        'msgtype': 'markdown',
+        'markdown': {
             'title': 'UnicomTask每日报表',
             'text': content
         }
@@ -56,7 +57,13 @@ def sendTg():
     token = os.environ.get('TG_TOKEN')
     #用户的ID
     chat_id = os.environ.get('TG_USERID')
-    url = f'https://api.telegram.org/bot{token}/sendMessage?chat_id={chat_id}&text={data}'
+    url: 'https://api.telegram.org/bot${TG_BOT_TOKEN}/sendMessage',
+    body: 'chat_id=${TG_USER_ID}&text=${content}',
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded'
+    }
+    res = requests.post(url,headers=headers,json=data)
+    #url = f'https://api.telegram.org/bot{token}/sendMessage?chat_id={chat_id}&text={data}}'
     print(url)
     session = requests.Session()
     resp = session.post(url)
