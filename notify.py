@@ -1,4 +1,4 @@
-import smtplib,traceback,os,requests
+import smtplib,traceback,os,requests,urllib
 from email.mime.text import MIMEText
 
 def readFile(filepath):
@@ -53,6 +53,7 @@ def sendTg():
             'text': content
         }
     }
+    content = urllib.parse.urlencode(data)
     #TG_BOT的token
     token = os.environ.get('TG_TOKEN')
     #用户的ID
