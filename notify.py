@@ -1,4 +1,4 @@
-import smtplib,traceback,os,requests
+import smtplib,traceback,os,requests,urllib
 from email.mime.text import MIMEText
 
 def readFile(filepath):
@@ -46,12 +46,7 @@ def sendDing():
 def sendTg():
     #发送内容
     content = readFile('log.txt')
-    data = {
-        {
-            'title': 'UnicomTask每日报表',
-            'text': content
-        }
-    }
+    data = urllib.parse.urlencode(content)
     #TG_BOT的token
     token = os.environ.get('TG_TOKEN')
     #用户的ID
