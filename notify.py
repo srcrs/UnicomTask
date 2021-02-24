@@ -42,7 +42,27 @@ def sendDing():
     else:
         print('dinngTalk push error : ' + res['errmsg'])
 
-
+#发送Tg通知
+def sendTg():
+    #发送内容
+    content = readFile('log.txt')
+    data = {
+        'msgtype': 'markdown',
+        'markdown': {
+            'title': 'UnicomTask每日报表',
+            'text': content
+        }
+    }
+    #TG_BOT的token
+    token = os.environ.get('TG_TOKEN')
+    #用户的ID
+    chat_id = os.environ.get('TG_USERID')
+    url = f'https://api.telegram.org/bot{token}/sendMessage?chat_id={chat_id}&text={data}}'
+    print(url)
+    session = requests.Session()
+    resp = session.post(url)
+    print(resp)
+    return resp.json()
 '''
 #参考自文章 https://zhuanlan.zhihu.com/p/24180606 用python发送邮件
 def sendEmail():
