@@ -49,8 +49,7 @@ def sendTg():
     data = {
             'UnicomTask每日报表',
             content
-            }
-    }
+           }
     #TG_BOT的token
     token = os.environ.get('TG_TOKEN')
     #用户的ID
