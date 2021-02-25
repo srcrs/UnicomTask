@@ -28,6 +28,7 @@ jobs:
     - name: Install dependencies
       run: |
         pip install -r requirements.txt
+    #第一个账号
     - name: Build and publish
       env:
         USERNAME_COVER: ${{ secrets.USERNAME_COVER }}
@@ -35,5 +36,15 @@ jobs:
         APPID_COVER: ${{secrets.APPID_COVER}}
         EMAIL_COVER: ${{secrets.EMAIL_COVER}}
         LOTTERY_NUM: ${{secrets.LOTTERY_NUM}}
+      run: |
+        python main.py
+#第二个账号
+    - name: Build and publish 2
+      env:
+        USERNAME_COVER: ${{ secrets.USERNAME_COVER2 }}
+        PASSWORD_COVER: ${{ secrets.PASSWORD_COVER2 }}
+        APPID_COVER: ${{secrets.APPID_COVER2}}
+        EMAIL_COVER: ${{secrets.EMAIL_COVER2}}
+        LOTTERY_NUM: ${{secrets.LOTTERY_NUM2}}
       run: |
         python main.py
