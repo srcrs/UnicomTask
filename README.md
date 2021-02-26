@@ -26,7 +26,7 @@
 * [x] 每日领取100定向积分 
 * [x] 积分抽奖，每天最多抽30次(中奖几率渺茫)
 * [x] 冬奥积分活动(第1和7天，可领取600定向积分，其余领取300定向积分,有效期至下月底)
-* [x] 邮件推送运行结果
+* [x] 邮件、钉钉推送运行结果
 
 # Github Actions 部署方法
 
@@ -58,6 +58,9 @@ PASSWORD_COVER | 123456 | 服务密码(必须)
 APPID_COVER | xxxxxxxxx | appId(必须)
 EMAIL_COVER | xxxxx@qq.com | 邮箱(可选)
 LOTTERY_NUM | 填写正整数 | 抽奖次数(可选)
+DINGTALK_WEBHOOK | https://oapi.dingtalk.com/robot/send?access_token=xxxx | 钉钉自定义机器人webhook(可选)
+
+[钉钉自定义机器人使用方式](https://developers.dingtalk.com/document/app/custom-robot-access)，注意安全设置部分，选择自定义关键词，填写`UnicomTask`。
 
 ![](https://draw-static.vercel.app/UnicomTask/将参数填到Secrets中.gif)
 
@@ -77,9 +80,9 @@ LOTTERY_NUM | 填写正整数 | 抽奖次数(可选)
 
 # 同步上游代码
 
-在最新的代码中，已经加上自动同步上游代码的action，将会定时在每周五16点执行，文件地址在`.github/workflows/auto_merge.yml`。
+在最新的代码中，已经加上自动同步上游代码的action，将会定时在每周五16点执行，文件地址在`.github/workflows/auto_merge.yml`。（当上游或者本地`UnicomTask.yml`配置文件发生变动时，会导致拉取更新失败）
 
-同时您也可以安装[pull](https://github.com/apps/pull)应用，也可实现自动同步上游代码。
+同时您也可以安装[pull](https://github.com/apps/pull)应用，也可实现自动同步上游代码。（修改了`UnicomTask.yml`同样会导致拉取更新失败，需要手动解决冲突，例如多账号）
 
 # 申明
 
