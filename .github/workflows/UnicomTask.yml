@@ -42,3 +42,13 @@ jobs:
         TG_USERID: ${{ secrets.TG_USERID }}
       run: |
         python main.py
+    - name: Build and publish 2
+      env:
+        USERNAME_COVER: ${{ secrets.USERNAME_COVER_2 }}
+        PASSWORD_COVER: ${{ secrets.PASSWORD_COVER_2 }}
+        APPID_COVER: ${{ secrets.APPID_COVER_2 }}
+        EMAIL_COVER: ${{ secrets.EMAIL_COVER_2 }}
+        LOTTERY_NUM: ${{ secrets.LOTTERY_NUM_2 }}
+        DINGTALK_WEBHOOK: ${{ secrets.DINGTALK_WEBHOOK_2 }}
+      run: |
+        python main.py
