@@ -1,9 +1,9 @@
 [
     {
-        " username ":  "",
-        " password ":  "",
-        " appId ":"",
-        " email ":"",
-        " lotteryNum ":""
+        "username":"",
+        "password":"",
+        "appId":"",
+        "email":"",
+        "lotteryNum":""
     }
 ]
