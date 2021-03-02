@@ -11,7 +11,7 @@
 
 # 简介
 
-👯✨😄📫
+👯✨📫
 
 联通手机营业厅自动完成每日任务，领流量、签到获取积分等，月底流量不发愁。
 
@@ -181,7 +181,6 @@ USERS_COVER | config.json中内容
 本项目仅用于学习。
 
 # 参考项目
-
 [mixool/HiCnUnicom](https://github.com/mixool/HiCnUnicom)，感谢该项目对于登录部分的思路
 
 [happy888888/BiliExp](https://github.com/happy888888/BiliExp)，参考了该项目的云函数实现
