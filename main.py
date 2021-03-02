@@ -5,8 +5,8 @@
 
 import requests,json,time,re,login,logging,traceback,os,random,notify
 
-#用户登录
-client = login.login()
+#用户登录全局变量
+client = None
 
 #获取沃之树首页，得到领流量的目标值
 def get_woTree_glowList():
@@ -47,11 +47,11 @@ def woTree_task():
 #经多次测试，都可加倍成功了
 #每日签到，1积分 +4 积分(翻倍)，第七天得到 1G 日包
 #位置: 我的 --> 我的金币
-def daySign_task():
+def daySign_task(username):
     try:
         #参考同类项目 HiCnUnicom 待明日验证是否能加倍成功
         client.headers.update({'referer': 'https://img.client.10010.com/activitys/member/index.html'})
-        param = 'yw_code=&desmobile=' + os.environ.get('USERNAME_COVER') + '&version=android@$8.0100'
+        param = 'yw_code=&desmobile=' + username + '&version=android@$8.0100'
         client.get('https://act.10010.com/SigninApp/signin/querySigninActivity.htm?' + param)
         client.headers.update({'referer': 'https://act.10010.com/SigninApp/signin/querySigninActivity.htm?' + param})
         daySign = client.post('https://act.10010.com/SigninApp/signin/daySign')
@@ -103,7 +103,7 @@ def luckDraw_task():
             time.sleep(1)
     except Exception as e:
         print(traceback.format_exc())
-        logging.error('【每日签到】: 错误，原因为: ' + str(e))
+        logging.error('【天天抽奖】: 错误，原因为: ' + str(e))
 
 #游戏任务中心每日打卡领积分，游戏任务自然数递增至7，游戏频道每日1积分
 #位置: 首页 --> 游戏 --> 每日打卡
@@ -241,7 +241,7 @@ def day100Integral_task():
 #积分抽奖，可在环境变量中设置抽奖次数，否则每天将只会抽奖一次
 #需要注意的是，配置完抽奖次数，程序每运行一次都将触发积分抽奖，直至达每日30次抽奖用完或积分不够(测试过程中未中过奖)
 #位置: 发现 --> 定向积分 --> 小积分，抽好礼
-def pointsLottery_task():
+def pointsLottery_task(n):
     try:
         numjsp = get_encryptmobile()
         #每日首次免费
@@ -249,10 +249,9 @@ def pointsLottery_task():
         oneFree.encoding = 'utf-8'
         res1 = oneFree.json()
         logging.info("【积分抽奖】: " + res1['RspMsg'] + ' x免费')
-        num = 0
         #如果用户未设置此值，将不会自动抽奖
-        if len(os.environ.get('LOTTERY_NUM')) != 0:
-            num = int(os.environ.get('LOTTERY_NUM'))
+        #预防用户输入30以上，造成不必要的抽奖操作
+        num = min(30,int(n))
         for i in range(num):
             #用积分兑换抽奖机会
             client.get('https://m.client.10010.com/dailylottery/static/integral/duihuan?goldnumber=10&banrate=30&usernumberofjsp=' + numjsp)
@@ -297,18 +296,45 @@ def dongaoPoints_task():
         print(traceback.format_exc())
         logging.error('【东奥积分活动】: 错误，原因为: ' + str(e))
 
+#读取用户配置信息
+def readJson():
+    try:
+        #用户配置信息
+        with open('./config.json','r') as fp:
+            users = json.load(fp)
+            return users
+    except Exception as e:
+        print(traceback.format_exc())
+        logging.error('账号信息格式填写错误，原因为: ' + str(e))
+
+#腾讯云函数入口
+def main(event, context):
+    users = readJson()
+    for user in users:
+        #清空上一个用户的日志记录
+        open('./log.txt',mode='w',encoding='utf-8')
+        global client
+        client = login.login(user['username'],user['password'],user['appId'])
+        if client != False:
+            daySign_task(user['username'])
+            luckDraw_task()
+            if ('lotteryNum' in user):
+                pointsLottery_task(user['lotteryNum'])
+            else:
+                pointsLottery_task(0)
+            day100Integral_task()
+            dongaoPoints_task()
+            woTree_task()
+            gameCenterSign_Task()
+            openBox_task()
+            collectFlow_task()
+        if ('email' in user) :
+            notify.sendEmail(user['email'])
+        if ('dingtalkWebhook' in user) :
+            notify.sendDing(user['dingtalkWebhook'])
+        if ('tgToken' in user) :
+            notify.sendTg(user['tgToken'],user['tgUserId'])
+
+#主函数入口
 if __name__ == '__main__':
-    if client != False:
-        daySign_task()
-        luckDraw_task()
-        pointsLottery_task()
-        day100Integral_task()
-        dongaoPoints_task()
-        woTree_task()
-        gameCenterSign_Task()
-        openBox_task()
-        collectFlow_task()
-    if len(os.environ.get('EMAIL_COVER')) != 0:
-        notify.sendEmail()
-    if len(os.environ.get('DINGTALK_WEBHOOK')) !=0:
-        notify.sendDing()
+    main("","")

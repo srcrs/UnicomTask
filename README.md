@@ -15,6 +15,33 @@
 
 联通手机营业厅自动完成每日任务，领流量、签到获取积分等，月底流量不发愁。
 
+开源不易，如果本项目对你有帮助，那么就请给个star吧。😄
+
+# 目录
+
+- [简介](#简介)
+- [目录](#目录)
+- [功能](#功能)
+- [使用方式](#使用方式)
+  - [Github Actions（推荐）](#github-actions推荐)
+    - [1.fork本项目](#1fork本项目)
+    - [2.准备需要的参数](#2准备需要的参数)
+    - [3.将参数填到Secrets](#3将参数填到secrets)
+    - [4.开启Actions](#4开启actions)
+    - [5.进行一次push操作](#5进行一次push操作)
+  - [腾讯云函数（推荐）](#腾讯云函数推荐)
+    - [1.fork本项目](#1fork本项目-1)
+    - [2.准备需要的参数](#2准备需要的参数-1)
+    - [3.将参数填到Secrets](#3将参数填到secrets-1)
+    - [4.部署](#4部署)
+- [通知推送方式](#通知推送方式)
+  - [1.邮箱](#1邮箱)
+  - [2.钉钉机器人](#2钉钉机器人)
+  - [3.TgBot机器人](#3tgbot机器人)
+- [同步上游代码](#同步上游代码)
+- [申明](#申明)
+- [参考项目](#参考项目)
+
 # 功能
 
 * [x] 沃之树领流量、浇水(12M日流量)
@@ -26,51 +53,64 @@
 * [x] 每日领取100定向积分 
 * [x] 积分抽奖，每天最多抽30次(中奖几率渺茫)
 * [x] 冬奥积分活动(第1和7天，可领取600定向积分，其余领取300定向积分,有效期至下月底)
-* [x] 邮件、钉钉推送运行结果
+* [x] 邮件、钉钉、Tg推送运行结果
 
-# Github Actions 部署方法
+# 使用方式
 
-## 1.fork本项目
+## Github Actions（推荐）
+
+### 1.fork本项目
 
 项目地址：[srcrs/UnicomTask](https://github.com/srcrs/UnicomTask)
 
 ![](https://draw-static.vercel.app/UnicomTask/fork本项目.gif)
 
-## 2.准备需要的参数
+### 2.准备需要的参数
 
-手机号、服务密码、appID。
+手机号、服务密码、`appId`。
 
-其中appId的获取:
+其中`appId`的获取:
 
-+ 安卓用户可在文件管理 --> Unicom/appid 文件中获取。
++ 安卓用户可在文件管理 --> `Unicom/appid` 文件中获取。
 
 + 苹果用户可抓取客户端登录接口获取。
 > `https://m.client.10010.com/mobileService/login.htm`
  
-## 3.将必要参数填到Secrets
+### 3.将参数填到Secrets
 
 在`Secrets`中的`Name`和`Value`格式如下：
 
-Name | Value | 说明
+Name | Value
 -|-|-
-USERNAME_COVER | 18566669999 | 手机号(必须)
-PASSWORD_COVER | 123456 | 服务密码(必须)
-APPID_COVER | xxxxxxxxx | appId(必须)
-EMAIL_COVER | xxxxx@qq.com | 邮箱(可选)
-LOTTERY_NUM | 填写正整数 | 抽奖次数(可选)
-DINGTALK_WEBHOOK | https://oapi.dingtalk.com/robot/send?access_token=xxxx | 钉钉自定义机器人webhook(可选)
+USERS_COVER | config.json中内容
 
-[钉钉自定义机器人使用方式](https://developers.dingtalk.com/document/app/custom-robot-access)，注意安全设置部分，选择自定义关键词，填写`UnicomTask`。
+将`config.json`中内容复制下来，按照要求填写添加到`Secrets`中，如若选填内容不想配置，需将该行删除。如只想基本功能，无需通知和用积分抽奖，应填写如下内容：
+
+```json
+[
+    {
+        "username": "18566669999",
+        "password": "123456",
+        "appId": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+    }
+]
+```
+
+注意`json`格式，最后一个要删掉逗号。建议在填写之前，使用[json校验工具](https://www.bejson.com/)进行校验。
+
+注意：不要将个人信息填写到仓库`config.json`文件中（不要动这个文件就没事），以免泄露。
+
+多账号，参考[关于多账号的使用方式](https://github.com/srcrs/UnicomTask/discussions/16)
 
 ![](https://draw-static.vercel.app/UnicomTask/将参数填到Secrets中.gif)
 
-## 4.开启Actions
+### 4.开启Actions
 
 默认`Actions`处于禁止状态，在`Actions`选项中开启`Actions`功能，把那个绿色的长按钮点一下。如果看到左侧工作流上有黄色`!`号，还需继续开启。
 
 ![](https://draw-static.vercel.app/UnicomTask/开启Actions.gif)
 
-## 5.进行一次push操作
+### 5.进行一次push操作
 
 `push`操作会触发工作流运行。
 
@@ -78,9 +118,61 @@ DINGTALK_WEBHOOK | https://oapi.dingtalk.com/robot/send?access_token=xxxx | 钉�
 
 ![](https://draw-static.vercel.app/UnicomTask/进行一次push操作.gif)
 
+## 腾讯云函数（推荐）
+
+### 1.fork本项目
+
+项目地址：[srcrs/UnicomTask](https://github.com/srcrs/UnicomTask)
+
+### 2.准备需要的参数
+
+* 开通云函数 `SCF` 的腾讯云账号，在[访问秘钥页面](https://console.cloud.tencent.com/cam/capi)获取账号的 `TENCENT_SECRET_ID`，`TENCENT_SECRET_KEY`
+
+> 注意！为了确保权限足够，获取这两个参数时不要使用子账户！此外，腾讯云账户需要[实名认证](https://console.cloud.tencent.com/developer/auth)。
+
+* 依次登录 [SCF 云函数控制台](https://console.cloud.tencent.com/scf) 和 [SLS 控制台](https://console.cloud.tencent.com/sls) 开通相关服务，确保您已开通服务并创建相应[服务角色](https://console.cloud.tencent.com/cam/role) **SCF_QcsRole、SLS_QcsRole**
+
+* 手机号，服务密码，appId等等（参考[2.准备需要的参数](#2准备需要的参数)）
+
+### 3.将参数填到Secrets
+
+`Name`和`Value`格式如下：
+  
+Name | Value
+-|-
+TENCENT_SECRET_ID | 腾讯云用户SecretID(需要主账户，子账户可能没权限)
+TENCENT_SECRET_KEY | 腾讯云账户SecretKey
+USERS_COVER | config.json中内容
+
+如对于`Secrets`不知如何添加，参考[3.将参数填到Secrets](#3将参数填到secrets)
+
+![](https://draw-static.vercel.app/UnicomTask/云函数添加Secrets.png)
+
+### 4.部署
+
+* 添加完上面`3`个`Secrets`后，进入`Actions`(上面那个不是`Secrets`下面那个) --> `deploy for serverless`，点击右边的`Run workflow`即可部署至腾讯云函数(如果出错请在红叉右边点击`deploy for serverless`查看部署任务的输出信息找出错误原因)。
+
+* 首次`fork`可能要去`Actions`里面同意使用`Actions`条款，如果`Actions`里面没有`deploy for serverless`，点一下右上角的`star`，`deploy for serverless`就会出现在`Actions`里面。（参考[4.开启Actions](#4开启actions)）
+
+# 通知推送方式
+
+## 1.邮箱
+
+本方式较简单，只需要填写邮箱即可，由于使用的是公共`API`接口，稳定性不高
+
+## 2.钉钉机器人
+
+钉钉群组自定义机器人，配置稍微复杂一些，但是稳定性高，使用方式参考如下：
+
+[钉钉自定义机器人使用方式](https://developers.dingtalk.com/document/app/custom-robot-access)，注意安全设置部分，选择自定义关键词，填写`UnicomTask`。
+
+## 3.TgBot机器人
+
+类似于钉钉机器人，只需要一个`token`和`userId`，自行搜索这两个参数的获取方式。
+
 # 同步上游代码
 
-在最新的代码中，已经加上自动同步上游代码的action，将会定时在每周五16点执行，文件地址在`.github/workflows/auto_merge.yml`。
+在最新的代码中，已经加上自动同步上游代码的`Action`，将会定时在每周五`16`点执行，文件地址在`.github/workflows/auto_merge.yml`。
 
 同时您也可以安装[pull](https://github.com/apps/pull)应用，也可实现自动同步上游代码。
 
@@ -91,3 +183,5 @@ DINGTALK_WEBHOOK | https://oapi.dingtalk.com/robot/send?access_token=xxxx | 钉�
 # 参考项目
 
 [mixool/HiCnUnicom](https://github.com/mixool/HiCnUnicom)，感谢该项目对于登录部分的思路
+
+[happy888888/BiliExp](https://github.com/happy888888/BiliExp)，参考了该项目的云函数实现

@@ -1,90 +1,86 @@
-import smtplib,traceback,os,requests
+# -*- coding: utf-8 -*-
+# @Time    : 2021/2/23 06:30
+# @Author  : srcrs
+# @Email   : srcrs@foxmail.com
+
+import smtplib,traceback,os,requests,urllib
 from email.mime.text import MIMEText
 
+#返回要推送的通知内容
+#对markdown的适配要更好
 def readFile(filepath):
-    with open(filepath,'r',encoding='UTF-8') as fp:
-        content=fp.read()
+    content = ''
+    for line in open(filepath):
+        content += line + '\n\n'
     return content
 
 #邮件推送api来自流星云
-def sendEmail():
-    #要发送邮件内容
-    content = readFile('log.txt')
-    #接收方邮箱
-    receivers = os.environ.get('EMAIL_COVER')
-    #邮件主题
-    subject = 'UnicomTask每日报表'
-    param = '?address=' + receivers + '&name=' + subject + '&certno=' + content
-    res = requests.get('http://liuxingw.com/api/mail/api.php' + param)
-    res.encoding = 'utf-8'
-    res = res.json()
-    print(res['msg'])
+#备用方案推送api来自BER
+def sendEmail(email):
+    try:
+        #要发送邮件内容
+        content = readFile('./log.txt')
+        #接收方邮箱
+        receivers = email
+        #邮件主题
+        subject = 'UnicomTask每日报表'
+        param1 = '?address=' + receivers + '&name=' + subject + '&certno=' + content
+        param2 = '?to=' + receivers + '&title=' + subject + '&text=' + content
+        res1 = requests.get('http://liuxingw.com/api/mail/api.php' + param1)
+        res1.encoding = 'utf-8'
+        res1 = res1.json()
+        if res1['Code'] == '1':
+            print(res1['msg'])
+        else:
+            #备用推送
+            requests.get('https://email.berfen.com/api' + param2)
+            print('email push BER')
+            #这里不知道为什么，在很多情况下返回的不是 json，
+            # 但在测试过程中成功率极高,因此直接输出
+    except Exception as e:
+        print('邮件推送异常，原因为: ' + str(e))
+        print(traceback.format_exc())
 
 #钉钉群自定义机器人推送
-def sendDing():
-    #要发送邮件内容
-    content = readFile('log.txt')
-    data = {
-        'msgtype': 'markdown',
-        'markdown': {
-            'title': 'UnicomTask每日报表',
-            'text': content
-        }
-    }
-    headers = {
-        'Content-Type': 'application/json;charset=utf-8'
-    }
-    res = requests.post(os.environ.get('DINGTALK_WEBHOOK'),headers=headers,json=data)
-    res.encoding = 'utf-8'
-    res = res.json()
-    if res['errcode'] == '0':
-        print('dinngTalk push success')
-    else:
-        print('dinngTalk push error : ' + res['errmsg'])
-
-
-'''
-#参考自文章 https://zhuanlan.zhihu.com/p/24180606 用python发送邮件
-def sendEmail():
-    #设置服务器所需信息
-    #163邮箱服务器地址
-    mail_host = 'smtp.163.com'  
-    #163用户名
-    mail_user = 'bot2021' 
-    #密码(部分邮箱为授权码) 
-    mail_pass = 'KXEXSFCZWFEIASLE'   
-    #邮件发送方邮箱地址
-    sender = 'bot2021@163.com'  
-    #邮件接受方邮箱地址，注意需要[]包裹，这意味着你可以写多个邮件地址群发
-    receivers = [os.environ.get('EMAIL_COVER')]  
-    
-    #设置email信息
-    #要发送的邮件内容
-    basename = os.path.basename("log.txt")
-    content = readFile('log.txt')
-    #邮件内容设置
-    message = MIMEText(content,'html','utf-8')
-    #邮件主题       
-    message['Subject'] = 'UnicomTask每日报表' 
-    #发送方信息
-    message['From'] = sender 
-    #接受方信息     
-    message['To'] = receivers[0]  
-    
-    #登录并发送邮件
+def sendDing(webhook):
     try:
-        smtpObj = smtplib.SMTP() 
-        #连接到服务器
-        smtpObj.connect(mail_host,25)
-        #登录到服务器
-        smtpObj.login(mail_user,mail_pass) 
-        #发送
-        smtpObj.sendmail(
-            sender,receivers,message.as_string()) 
-        #退出
-        smtpObj.quit() 
-        print('email push success')
-    except smtplib.SMTPException as e:
-        print('email push error')
+        #要发送邮件内容
+        content = readFile('./log.txt')
+        data = {
+            'msgtype': 'markdown',
+            'markdown': {
+                'title': 'UnicomTask每日报表',
+                'text': content
+            }
+        }
+        headers = {
+            'Content-Type': 'application/json;charset=utf-8'
+        }
+        res = requests.post(webhook,headers=headers,json=data)
+        res.encoding = 'utf-8'
+        res = res.json()
+        print('dinngTalk push : ' + res['errmsg'])
+    except Exception as e:
+        print('钉钉机器人推送异常，原因为: ' + str(e))
         print(traceback.format_exc())
-'''
+
+#发送Tg通知
+def sendTg(token,chat_id):
+    try:
+        #发送内容
+        content = readFile('./log.txt')
+        data = {
+            'UnicomTask每日报表':content
+        }
+        content = urllib.parse.urlencode(data)
+        #TG_BOT的token
+        #token = os.environ.get('TG_TOKEN')
+        #用户的ID
+        #chat_id = os.environ.get('TG_USERID')
+        url = f'https://api.telegram.org/bot{token}/sendMessage?chat_id={chat_id}&text={content}'
+        session = requests.Session()
+        resp = session.post(url)
+        print(resp)
+    except Exception as e:
+        print('Tg通知推送异常，原因为: ' + str(e))
+        print(traceback.format_exc())
