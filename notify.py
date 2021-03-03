@@ -7,9 +7,11 @@ import smtplib,traceback,os,requests,urllib
 from email.mime.text import MIMEText
 
 #返回要推送的通知内容
+#对markdown的适配要更好
 def readFile(filepath):
-    with open(filepath,'r',encoding='UTF-8') as fp:
-        content=fp.read()
+    content = ''
+    for line in open(filepath):
+        content += line + '\n\n'
     return content
 
 #邮件推送api来自流星云
