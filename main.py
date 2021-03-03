@@ -249,11 +249,9 @@ def pointsLottery_task(n):
         oneFree.encoding = 'utf-8'
         res1 = oneFree.json()
         logging.info("【积分抽奖】: " + res1['RspMsg'] + ' x免费')
-        num = 0
         #如果用户未设置此值，将不会自动抽奖
         #预防用户输入30以上，造成不必要的抽奖操作
-        if len(n) != 0:
-            num = min(30,int(n))
+        num = min(30,int(n))
         for i in range(num):
             #用积分兑换抽奖机会
             client.get('https://m.client.10010.com/dailylottery/static/integral/duihuan?goldnumber=10&banrate=30&usernumberofjsp=' + numjsp)
@@ -298,6 +296,30 @@ def dongaoPoints_task():
         print(traceback.format_exc())
         logging.error('【东奥积分活动】: 错误，原因为: ' + str(e))
 
+#每日1G流量日包领取
+#位置: 签到 --> 免费领 -->  免费领流量
+def dayOneG_Task():
+    try:
+        #观看视频任务
+        client.post('https://act.10010.com/SigninApp/doTask/finishVideo')
+        #请求任务列表
+        getTaskInfo = client.post('https://act.10010.com/SigninApp/doTask/getTaskInfo')
+        getTaskInfo.encoding = 'utf-8'
+        getPrize = client.post('https://act.10010.com/SigninApp/doTask/getPrize')
+        getPrize.encoding = 'utf-8'
+        client.post('https://act.10010.com/SigninApp/doTask/getTaskInfo')
+        res1 = getTaskInfo.json()
+        res2 = getPrize.json()
+        if(res1['data']['taskInfo']['status'] == '1'):
+            logging.info('【1G流量日包】: ' + res2['data']['statusDesc'])
+        else:
+            logging.info('【1G流量日包】: ' + res1['data']['taskInfo']['btn'])
+        time.sleep(1)
+    except Exception as e:
+        print(traceback.format_exc())
+        logging.error('【1G流量日包】: 错误，原因为: ' + str(e))
+
+
 #读取用户配置信息
 def readJson():
     try:
@@ -313,27 +335,30 @@ def readJson():
 def main(event, context):
     users = readJson()
     for user in users:
+        #清空上一个用户的日志记录
+        open('./log.txt',mode='w',encoding='utf-8')
         global client
         client = login.login(user['username'],user['password'],user['appId'])
         if client != False:
             daySign_task(user['username'])
+            dayOneG_Task()
             luckDraw_task()
-            pointsLottery_task(user['lotteryNum'])
+            if ('lotteryNum' in user):
+                pointsLottery_task(user['lotteryNum'])
+            else:
+                pointsLottery_task(0)
             day100Integral_task()
             dongaoPoints_task()
             woTree_task()
             gameCenterSign_Task()
             openBox_task()
             collectFlow_task()
-        if len(user['email']) != 0:
+        if ('email' in user) :
             notify.sendEmail(user['email'])
-        if len(user['dingtalkWebhook']) !=0:
+        if ('dingtalkWebhook' in user) :
             notify.sendDing(user['dingtalkWebhook'])
-        if len(user['tgToken']) !=0:
+        if ('tgToken' in user) :
             notify.sendTg(user['tgToken'],user['tgUserId'])
-        #清空上一个用户的日志记录
-        f = open('./log.txt','w')
-        f.truncate()
 
 #主函数入口
 if __name__ == '__main__':

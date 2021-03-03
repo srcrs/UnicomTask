@@ -15,6 +15,8 @@
 
 联通手机营业厅自动完成每日任务，领流量、签到获取积分等，月底流量不发愁。
 
+开源不易，如果本项目对你有帮助，那么就请给个star吧。😄
+
 # 目录
 
 - [简介](#简介)
@@ -51,6 +53,7 @@
 * [x] 每日领取100定向积分 
 * [x] 积分抽奖，每天最多抽30次(中奖几率渺茫)
 * [x] 冬奥积分活动(第1和7天，可领取600定向积分，其余领取300定向积分,有效期至下月底)
+* [x] 获取每日1G流量日包(截止日期暂时不知道)
 * [x] 邮件、钉钉、Tg推送运行结果
 
 # 使用方式
@@ -82,22 +85,19 @@ Name | Value
 -|-|-
 USERS_COVER | config.json中内容
 
-将`config.json`中内容复制下来，按照要求填写添加到`Secrets`中，如若选填内容不想配置，需将该项留空。如只想基本功能，无需通知和用积分抽奖，应填写如下内容：
+将`config.json`中内容复制下来，按照要求填写添加到`Secrets`中，如若选填内容不想配置，需将该行删除。如只想基本功能，无需通知和用积分抽奖，应填写如下内容：
 
 ```json
 [
     {
         "username": "18566669999",
         "password": "123456",
-        "appId": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
-        "email": "",
-        "lotteryNum": "",
-        "dingtalkWebhook": "",
-        "tgToken": "",
-        "tgUserId": ""
+        "appId": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
     }
 ]
 ```
+
+注意`json`格式，最后一个要删掉逗号。建议在填写之前，使用[json校验工具](https://www.bejson.com/)进行校验。
 
 注意：不要将个人信息填写到仓库`config.json`文件中（不要动这个文件就没事），以免泄露。
 
@@ -124,8 +124,6 @@ USERS_COVER | config.json中内容
 ### 1.fork本项目
 
 项目地址：[srcrs/UnicomTask](https://github.com/srcrs/UnicomTask)
-
-![](https://draw-static.vercel.app/UnicomTask/fork本项目.gif)
 
 ### 2.准备需要的参数
 
