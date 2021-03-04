@@ -7,6 +7,7 @@
         "lotteryNum": "抽奖次数（选填，不填请删除此行）",
         "dingtalkWebhook": "钉钉通知 https://oapi.dingtalk.com/robot/send?access_token=xxxx（选填，不填请删除此行）",
         "tgToken": "Tg通知 token（选填，不填请删除此行）",
-        "tgUserId": "Tg通知 群组Id（选填，不填请删除此行）"
+        "tgUserId": "Tg通知 群组Id（选填，不填请删除此行）",
+        "pushplusToken": "push+ token（选填，不填请删除此行）"
     }
 ]
