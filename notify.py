@@ -3,7 +3,7 @@
 # @Author  : srcrs
 # @Email   : srcrs@foxmail.com
 
-import smtplib,traceback,os,requests,urllib
+import smtplib,traceback,os,requests,urllib,json
 from email.mime.text import MIMEText
 
 #返回要推送的通知内容
@@ -83,4 +83,22 @@ def sendTg(token,chat_id):
         print(resp)
     except Exception as e:
         print('Tg通知推送异常，原因为: ' + str(e))
+        print(traceback.format_exc())
+
+#发送push+通知
+def sendPushplus(token):
+    try:
+        #发送内容
+        data = {
+            "token": token,
+            "title": "UnicomTask每日报表",
+            "content": readFile('./log.txt')
+        }
+        url = 'http://pushplus.hxtrip.com/send/'
+        headers = {'Content-Type': 'application/json'}
+        body = json.dumps(data).encode(encoding='utf-8')
+        resp = requests.post(url, data=body, headers=headers)
+        print(resp)
+    except Exception as e:
+        print('push+通知推送异常，原因为: ' + str(e))
         print(traceback.format_exc())
