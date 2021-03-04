@@ -171,6 +171,10 @@ USERS_COVER | config.json中内容
 
 类似于钉钉机器人，只需要一个`token`和`userId`，自行搜索这两个参数的获取方式。
 
+## 4.pushplus机器人
+
+类似于钉钉机器人，只需要一个`token`，参考http://pushplus.hxtrip.com/doc/guide/api.html#%E4%B8%80%E3%80%81%E5%8F%91%E9%80%81%E6%B6%88%E6%81%AF%E6%8E%A5%E5%8F%A3
+
 # 同步上游代码
 
 在最新的代码中，已经加上自动同步上游代码的`Action`，将会定时在每周五`16`点执行，文件地址在`.github/workflows/auto_merge.yml`。
