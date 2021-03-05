@@ -107,7 +107,9 @@ def luckDraw_task():
 
 #游戏任务中心每日打卡领积分，游戏任务自然数递增至7，游戏频道每日1积分
 #位置: 首页 --> 游戏 --> 每日打卡
-def gameCenterSign_Task():
+def gameCenterSign_Task(username):
+    param = '?yw_code=&desmobile=' + username + '&version=android@8.0100'
+    time.sleep(1)
     data1 = {
         'methodType': 'signin',
         'clientVersion': '8.0100',
@@ -119,6 +121,8 @@ def gameCenterSign_Task():
         'deviceType': 'iOS'
     }
     try:
+        client.get('https://img.client.10010.com/gametask/index.html' + param)
+        client.headers.update({'referer': 'https://img.client.10010.com/gametask/index.html' + param})
         #游戏任务积分
         gameCenter = client.post('https://m.client.10010.com/producGame_signin', data=data1)
         gameCenter.encoding='utf-8'
@@ -133,6 +137,7 @@ def gameCenterSign_Task():
         gameCenter_exp = client.post('https://m.client.10010.com/producGameApp',data=data2)
         gameCenter_exp.encoding='utf-8'
         res1 = gameCenter_exp.json()
+        client.headers.pop('referer')
         if res1['code'] == '0000':
             logging.info('【游戏频道打卡】: 获得' + str(res1['integralNum']) + '积分')
         else:
@@ -162,6 +167,8 @@ def openBox_task():
         'isVideo': 'Y'
     }
     try:
+        client.get('https://img.client.10010.com/shouyeyouxi/index.html')
+        client.headers.update({'referer': 'https://img.client.10010.com/shouyeyouxi/index.html'})
         #在分类中找到宝箱并开启
         box = client.post('https://m.client.10010.com/mobileService/customer/getShareRedisInfo.htm', data=data1)
         box.encoding='utf-8'
@@ -176,6 +183,7 @@ def openBox_task():
         time.sleep(1)
         watchAd = client.post('https://m.client.10010.com/game_box', data=data4)
         drawReward.encoding='utf-8'
+        client.headers.pop('referer')
         res = drawReward.json()
         if res['code'] == '0000':
             logging.info('【100M寻宝箱】: ' + '获得100M流量')
@@ -296,6 +304,30 @@ def dongaoPoints_task():
         print(traceback.format_exc())
         logging.error('【东奥积分活动】: 错误，原因为: ' + str(e))
 
+#每日1G流量日包领取
+#位置: 签到 --> 免费领 -->  免费领流量
+def dayOneG_Task():
+    try:
+        #观看视频任务
+        client.post('https://act.10010.com/SigninApp/doTask/finishVideo')
+        #请求任务列表
+        getTaskInfo = client.post('https://act.10010.com/SigninApp/doTask/getTaskInfo')
+        getTaskInfo.encoding = 'utf-8'
+        getPrize = client.post('https://act.10010.com/SigninApp/doTask/getPrize')
+        getPrize.encoding = 'utf-8'
+        client.post('https://act.10010.com/SigninApp/doTask/getTaskInfo')
+        res1 = getTaskInfo.json()
+        res2 = getPrize.json()
+        if(res1['data']['taskInfo']['status'] == '1'):
+            logging.info('【1G流量日包】: ' + res2['data']['statusDesc'])
+        else:
+            logging.info('【1G流量日包】: ' + res1['data']['taskInfo']['btn'])
+        time.sleep(1)
+    except Exception as e:
+        print(traceback.format_exc())
+        logging.error('【1G流量日包】: 错误，原因为: ' + str(e))
+
+
 #读取用户配置信息
 def readJson():
     try:
@@ -311,10 +343,13 @@ def readJson():
 def main(event, context):
     users = readJson()
     for user in users:
+        #清空上一个用户的日志记录
+        open('./log.txt',mode='w',encoding='utf-8')
         global client
         client = login.login(user['username'],user['password'],user['appId'])
         if client != False:
             daySign_task(user['username'])
+            dayOneG_Task()
             luckDraw_task()
             if ('lotteryNum' in user):
                 pointsLottery_task(user['lotteryNum'])
@@ -323,18 +358,19 @@ def main(event, context):
             day100Integral_task()
             dongaoPoints_task()
             woTree_task()
-            gameCenterSign_Task()
+            gameCenterSign_Task(user['username'])
             openBox_task()
             collectFlow_task()
         if ('email' in user) :
             notify.sendEmail(user['email'])
         if ('dingtalkWebhook' in user) :
             notify.sendDing(user['dingtalkWebhook'])
-        if ('tgToken' in user) :
-            notify.sendTg(user['tgToken'],user['tgUserId'])
-        #清空上一个用户的日志记录
-        f = open('./log.txt','w')
-        f.truncate()
+        if ('telegramBot' in user) :
+            notify.sendTg(user['telegramBot'])
+        if ('pushplusToken' in user):
+            notify.sendPushplus(user['pushplusToken'])
+        if('enterpriseWechat' in user):
+            notify.sendWechat(user['enterpriseWechat'])
 
 #主函数入口
 if __name__ == '__main__':
