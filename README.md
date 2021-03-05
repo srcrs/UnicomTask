@@ -88,7 +88,7 @@
 在`Secrets`中的`Name`和`Value`格式如下：
 
 Name | Value
--|-|-
+-|-
 USERS_COVER | config.json中内容
 
 将`config.json`中内容复制下来，按照要求填写添加到`Secrets`中，如若选填内容不想配置，需将该行删除。如只想基本功能，无需通知和用积分抽奖，应填写如下内容：
