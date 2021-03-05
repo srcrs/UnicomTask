@@ -8,18 +8,32 @@ from email.mime.text import MIMEText
 
 #返回要推送的通知内容
 #对markdown的适配要更好
+#增加文件关闭操作
 def readFile(filepath):
     content = ''
-    for line in open(filepath,encoding='utf-8'):
-        content += line + '\n\n'
+    with open(filepath, encoding='utf-8') as f:
+        for line in f.readlines():
+            content += line + '\n\n'
     return content
 
 #返回要推送的通知内容
 #对text的适配要更好
+#增加文件关闭操作
 def readFile_text(filepath):
     content = ''
-    for line in open(filepath,encoding='utf-8'):
-        content += line
+    with open(filepath, encoding='utf-8') as f:
+        for line in f.readlines():
+            content += line
+    return content
+
+#返回要推送的通知内容
+#对html的适配要更好
+#增加文件关闭操作
+def readFile_html(filepath):
+    content = ''
+    with open(filepath, "r" , encoding='utf-8') as f:
+        for line in f.readlines():
+            content += line + '<br>'
     return content
 
 #邮件推送api来自流星云
@@ -102,7 +116,7 @@ def sendPushplus(token):
         data = {
             "token": token,
             "title": "UnicomTask每日报表",
-            "content": readFile('./log.txt')
+            "content": readFile_html('./log.txt')
         }
         url = 'http://pushplus.hxtrip.com/send/'
         headers = {'Content-Type': 'application/json'}
