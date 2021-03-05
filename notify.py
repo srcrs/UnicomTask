@@ -73,7 +73,7 @@ def sendDing(webhook):
         print(traceback.format_exc())
 
 #发送Tg通知
-def sendTg(taBot):
+def sendTg(tgBot):
     try:
         token = tgBot['tgToken']
         chat_id = tgBot['tgUserId']
