@@ -35,9 +35,6 @@
     - [3.将参数填到Secrets](#3将参数填到secrets-1)
     - [4.部署](#4部署)
 - [通知推送方式](#通知推送方式)
-  - [1.邮箱](#1邮箱)
-  - [2.钉钉机器人](#2钉钉机器人)
-  - [3.TgBot机器人](#3tgbot机器人)
 - [同步上游代码](#同步上游代码)
 - [申明](#申明)
 - [参考项目](#参考项目)
@@ -54,7 +51,7 @@
 * [x] 积分抽奖，每天最多抽30次(中奖几率渺茫)
 * [x] 冬奥积分活动(第1和7天，可领取600定向积分，其余领取300定向积分,有效期至下月底)
 * [x] 获取每日1G流量日包(截止日期暂时不知道)
-* [x] 邮件、钉钉、Tg推送运行结果
+* [x] 邮件、钉钉、Tg、企业微信等推送运行结果
 
 # 使用方式
 
@@ -75,14 +72,23 @@
 + 安卓用户可在文件管理 --> `Unicom/appid` 文件中获取。
 
 + 苹果用户可抓取客户端登录接口获取。
-> `https://m.client.10010.com/mobileService/login.htm`
+
+> `https://m.client.10010.com/mobileService/login.htm`（解绑重新登录，在响应体中）
+
+> `https://m.client.10010.com/mobileService/onLine.htm`（退出客户端重新进入，在请求体中）
+
+> `http://m.client.10010.com/mobileService/customer/getclientconfig.htm?appId=xxx&mobile=yyy`（退出客户端重新进入，xxx就是）
+
+> `https://m.client.10010.com/mobileService/customer/accountListData.htm`（退出客户端重新进入，在请求体中）
+
+其中，后三个链接在安卓也是适用的。
  
 ### 3.将参数填到Secrets
 
 在`Secrets`中的`Name`和`Value`格式如下：
 
 Name | Value
--|-|-
+-|-
 USERS_COVER | config.json中内容
 
 将`config.json`中内容复制下来，按照要求填写添加到`Secrets`中，如若选填内容不想配置，需将该行删除。如只想基本功能，无需通知和用积分抽奖，应填写如下内容：
@@ -170,6 +176,14 @@ USERS_COVER | config.json中内容
 ## 3.TgBot机器人
 
 类似于钉钉机器人，只需要一个`token`和`userId`，自行搜索这两个参数的获取方式。
+
+## 4.pushplus机器人
+
+类似于钉钉机器人，只需要一个`token`，参考[获取pushplus的token](http://pushplus.hxtrip.com/doc/guide/api.html#%E4%B8%80%E3%80%81%E5%8F%91%E9%80%81%E6%B6%88%E6%81%AF%E6%8E%A5%E5%8F%A3)。
+
+## 5.企业微信应用通知
+
+企业微信自建应用，可发送消息，并且可以不借助第三方，将消息转发到普通微信。用电脑，进行[企业微信登录](https://work.weixin.qq.com/wework_admin/loginpage_wx)，普通微信扫码也可登录，，按照[此教程](https://note.youdao.com/ynoteshare1/index.html?id=351e08a72378206f9dd64d2281e9b83b&type=note#/)获取需要的三个值。
 
 # 同步上游代码
 
