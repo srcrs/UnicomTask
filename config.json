@@ -11,6 +11,7 @@
             "tgUserId": "Tg通知 群组Id（选填，不填请删除 telegramBot 对象）"
         },
         "pushplusToken": "push+ token（选填，不填请删除此行）",
+		"Barkkey": "Bark通知 key（选填，不填请删除此行） "
         "enterpriseWechat": {
             "id": "企业ID（选填，不填请删除 enterpriseWechat 对象）",
             "agentld": "企业微信自建应用AgentId（选填，不填请删除 enterpriseWechat 对象）",

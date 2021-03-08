@@ -150,3 +150,18 @@ def sendWechat(wex):
     message.encoding = 'utf-8'
     res = message.json()
     print('Wechat send : ' + res['errmsg'])
+
+#发送Bark通知
+def sendBarkkey(Barkkey):
+	#发送内容
+	content = readFile_text('./log.txt')
+	data = {
+		'UnicomTask每日报表':content
+	}
+	content = urllib.parse.urlencode(data)
+	url = f'https://api.day.app/{Barkkey}/{content}'
+	session = requests.Session()
+	resp = session.post(url)
+	state=json.loads(resp.text).get('message')
+	print(state)
+
