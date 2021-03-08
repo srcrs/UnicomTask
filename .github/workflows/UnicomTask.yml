@@ -34,3 +34,6 @@ jobs:
       run: |
         echo "$USERS_COVER" > ./config.json
         python main.py
+      timeout-minutes: 5
+
+
