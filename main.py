@@ -134,6 +134,7 @@ def gameCenterSign_Task(username):
         #等待1秒钟
         time.sleep(1)
         #游戏频道积分
+        logging.info('【游戏频道打卡】: 请手动打卡')
 #         gameCenter_exp = client.post('https://m.client.10010.com/producGameApp',data=data2)
 #         gameCenter_exp.encoding='utf-8'
 #         res1 = gameCenter_exp.json()
@@ -143,7 +144,6 @@ def gameCenterSign_Task(username):
 #         else:
 #             logging.info('【游戏频道打卡】: ' + res1['msg'])
 #         time.sleep(1)
-         logging.info('【游戏频道打卡】: 请手动打卡')
     except Exception as e:
         print(traceback.format_exc())
         logging.error('【游戏中心签到】: 错误，原因为: ' + str(e))
