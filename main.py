@@ -107,11 +107,9 @@ def luckDraw_task():
 
 #游戏任务中心每日打卡领积分，游戏任务自然数递增至7，游戏频道每日1积分
 #位置: 首页 --> 游戏 --> 每日打卡
-def gameCenterSign_Task():
+def gameCenterSign_Task(username):
     data1 = {
-        'methodType': 'signin',
-        'clientVersion': '8.0100',
-        'deviceType': 'Android'
+        'methodType': 'signin'
     }
     data2 = {
         'methodType': 'iOSIntegralGet',
@@ -119,24 +117,32 @@ def gameCenterSign_Task():
         'deviceType': 'iOS'
     }
     try:
-        #游戏任务积分
+        client.get('https://img.client.10010.com/gametask/index.html?yw_code=&desmobile='+username+'&version=android@8.0100')
+        time.sleep(2)
+        headers = {
+            'origin': 'https://img.client.10010.com',
+            'referer': 'https://img.client.10010.com/gametask/index.html?yw_code=&desmobile='+username+'&version=android@8.0100'
+        }
+        client.headers.update(headers)
+        #进行游戏中心签到
         gameCenter = client.post('https://m.client.10010.com/producGame_signin', data=data1)
-        gameCenter.encoding='utf-8'
-        res = gameCenter.json()
-        if res['respCode'] == '0000' and res['respDesc'] == '打卡并奖励成功':
-            logging.info('【游戏中心签到】: ' + '获得' + str(res['currentIntegral']) + '积分')
-        elif res['respCode'] == '0000':
-            logging.info('【游戏中心签到】: ' + res['respDesc'])
-        #等待1秒钟
+        gameCenter.encoding = 'utf-8'
+        res1 = gameCenter.json()
+        if res1['respCode'] == '0000' and res1['respDesc'] == '打卡并奖励成功':
+            logging.info('【游戏中心签到】: ' + '获得' + str(res1['currentIntegral']) + '积分')
+        elif res1['respCode'] == '0000':
+            logging.info('【游戏中心签到】: ' + res1['respDesc'])
         time.sleep(1)
         #游戏频道积分
         gameCenter_exp = client.post('https://m.client.10010.com/producGameApp',data=data2)
         gameCenter_exp.encoding='utf-8'
-        res1 = gameCenter_exp.json()
-        if res1['code'] == '0000':
-            logging.info('【游戏频道打卡】: 获得' + str(res1['integralNum']) + '积分')
+        res2 = gameCenter_exp.json()
+        if res2['code'] == '0000':
+            logging.info('【游戏频道打卡】: 获得' + str(res2['integralNum']) + '积分')
         else:
-            logging.info('【游戏频道打卡】: ' + res1['msg'])
+            logging.info('【游戏频道打卡】: ' + res2['msg'])
+        client.headers.pop('referer')
+        client.headers.pop('origin')
         time.sleep(1)
     except Exception as e:
         print(traceback.format_exc())
@@ -145,6 +151,8 @@ def gameCenterSign_Task():
 #开宝箱，赢话费任务 100M 流量
 #位置: 首页 --> 游戏 --> 每日打卡 --> 宝箱任务
 def openBox_task():
+    client.headers.update({'referer': 'https://img.client.10010.com'})
+    client.headers.update({'origin': 'https://img.client.10010.com'})
     data1 = {
         'thirdUrl': 'https://img.client.10010.com/shouyeyouxi/index.html#/youxibaoxiang'
     }
@@ -155,7 +163,7 @@ def openBox_task():
         'isVideo': 'N'
     }
     param = '?methodType=taskGetReward&taskCenterId=187&clientVersion=8.0100&deviceType=Android'
-    data4 = {
+    data3 = {
         'methodType': 'reward',
         'deviceType': 'Android',
         'clientVersion': '8.0100',
@@ -174,7 +182,7 @@ def openBox_task():
         #完成任务领取100M流量
         drawReward = client.get('https://m.client.10010.com/producGameTaskCenter' + param)
         time.sleep(1)
-        watchAd = client.post('https://m.client.10010.com/game_box', data=data4)
+        watchAd = client.post('https://m.client.10010.com/game_box', data=data3)
         drawReward.encoding='utf-8'
         res = drawReward.json()
         if res['code'] == '0000':
@@ -182,6 +190,8 @@ def openBox_task():
         else:
             logging.info('【100M寻宝箱】: ' + '任务失败')
         time.sleep(1)
+        client.headers.pop('referer')
+        client.headers.pop('origin')
     except Exception as e:
         print(traceback.format_exc())
         logging.error('【100M寻宝箱】: 错误，原因为: ' + str(e))
@@ -296,7 +306,32 @@ def dongaoPoints_task():
         print(traceback.format_exc())
         logging.error('【东奥积分活动】: 错误，原因为: ' + str(e))
 
+#每日1G流量日包领取
+#位置: 签到 --> 免费领 -->  免费领流量
+def dayOneG_Task():
+    try:
+        #观看视频任务
+        client.post('https://act.10010.com/SigninApp/doTask/finishVideo')
+        #请求任务列表
+        getTaskInfo = client.post('https://act.10010.com/SigninApp/doTask/getTaskInfo')
+        getTaskInfo.encoding = 'utf-8'
+        getPrize = client.post('https://act.10010.com/SigninApp/doTask/getPrize')
+        getPrize.encoding = 'utf-8'
+        client.post('https://act.10010.com/SigninApp/doTask/getTaskInfo')
+        res1 = getTaskInfo.json()
+        res2 = getPrize.json()
+        if(res1['data']['taskInfo']['status'] == '1'):
+            logging.info('【1G流量日包】: ' + res2['data']['statusDesc'])
+        else:
+            logging.info('【1G流量日包】: ' + res1['data']['taskInfo']['btn'])
+        time.sleep(1)
+    except Exception as e:
+        print(traceback.format_exc())
+        logging.error('【1G流量日包】: 错误，原因为: ' + str(e))
+
+
 #读取用户配置信息
+#错误原因有两种：格式错误、未读取到错误
 def readJson():
     try:
         #用户配置信息
@@ -305,7 +340,21 @@ def readJson():
             return users
     except Exception as e:
         print(traceback.format_exc())
-        logging.error('账号信息格式填写错误，原因为: ' + str(e))
+        logging.error('账号信息获取失败错误，原因为: ' + str(e))
+        logging.error('1.请检查是否在Secrets添加了账号信息，以及添加的位置是否正确。')
+        logging.error('2.填写之前，是否在网站验证过Json格式的正确性。')
+
+#获取积分余额
+def getIntegral():
+    try:
+        integral = client.post('https://act.10010.com/SigninApp/signin/getIntegral')
+        integral.encoding = 'utf-8'
+        res = integral.json()
+        logging.info('【积分余额】: ' + res['data']['integralTotal'])
+        time.sleep(1)
+    except Exception as e:
+        print(traceback.format_exc())
+        logging.error('【积分余额】: 错误，原因为: ' + str(e))
 
 #腾讯云函数入口
 def main(event, context):
@@ -316,7 +365,9 @@ def main(event, context):
         global client
         client = login.login(user['username'],user['password'],user['appId'])
         if client != False:
+            getIntegral()
             daySign_task(user['username'])
+            dayOneG_Task()
             luckDraw_task()
             if ('lotteryNum' in user):
                 pointsLottery_task(user['lotteryNum'])
@@ -324,16 +375,20 @@ def main(event, context):
                 pointsLottery_task(0)
             day100Integral_task()
             dongaoPoints_task()
-            woTree_task()
-            gameCenterSign_Task()
+            gameCenterSign_Task(user['username'])
             openBox_task()
             collectFlow_task()
+            woTree_task()
         if ('email' in user) :
             notify.sendEmail(user['email'])
         if ('dingtalkWebhook' in user) :
             notify.sendDing(user['dingtalkWebhook'])
-        if ('tgToken' in user) :
-            notify.sendTg(user['tgToken'],user['tgUserId'])
+        if ('telegramBot' in user) :
+            notify.sendTg(user['telegramBot'])
+        if ('pushplusToken' in user):
+            notify.sendPushplus(user['pushplusToken'])
+        if('enterpriseWechat' in user):
+            notify.sendWechat(user['enterpriseWechat'])
 
 #主函数入口
 if __name__ == '__main__':

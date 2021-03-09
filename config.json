@@ -6,7 +6,15 @@
         "email": "邮箱（选填，不填请删除此行）",
         "lotteryNum": "抽奖次数（选填，不填请删除此行）",
         "dingtalkWebhook": "钉钉通知 https://oapi.dingtalk.com/robot/send?access_token=xxxx（选填，不填请删除此行）",
-        "tgToken": "Tg通知 token（选填，不填请删除此行）",
-        "tgUserId": "Tg通知 群组Id（选填，不填请删除此行）"
+        "telegramBot": {
+            "tgToken": "Tg通知 token（选填，不填请删除 telegramBot 对象）",
+            "tgUserId": "Tg通知 群组Id（选填，不填请删除 telegramBot 对象）"
+        },
+        "pushplusToken": "push+ token（选填，不填请删除此行）",
+        "enterpriseWechat": {
+            "id": "企业ID（选填，不填请删除 enterpriseWechat 对象）",
+            "agentld": "企业微信自建应用AgentId（选填，不填请删除 enterpriseWechat 对象）",
+            "secret": "企业微信自建应用Secrets（选填不填请删除 enterpriseWechat 对象）"
+        }
     }
 ]
