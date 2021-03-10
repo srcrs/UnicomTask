@@ -9,7 +9,7 @@ from lxml import etree
 #用户登录全局变量
 client = None
 
-#获取沃之树首页，得到领流量的目标值
+'''#获取沃之树首页，得到领流量的目标值
 def get_woTree_glowList():
     index = client.post('https://m.client.10010.com/mactivity/arbordayJson/index.htm')
     index.encoding='utf-8'
@@ -331,7 +331,7 @@ def dayOneG_Task():
     except Exception as e:
         print(traceback.format_exc())
         logging.error('【1G流量日包】: 错误，原因为: ' + str(e))
-
+'''
 
 #读取用户配置信息
 #错误原因有两种：格式错误、未读取到错误
