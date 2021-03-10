@@ -52,6 +52,7 @@
 * [x] 冬奥积分活动(第1和7天，可领取600定向积分，其余领取300定向积分,有效期至下月底)
 * [x] 获取每日1G流量日包(截止日期暂时不知道)
 * [x] 邮件、钉钉、Tg、企业微信等推送运行结果
+* [x] 自动激活即将过期流量包（到期时间1天内）
 
 # 使用方式
 
@@ -161,6 +162,8 @@ USERS_COVER | config.json中内容
 
 * 首次`fork`可能要去`Actions`里面同意使用`Actions`条款，如果`Actions`里面没有`deploy for serverless`，点一下右上角的`star`，`deploy for serverless`就会出现在`Actions`里面。（参考[4.开启Actions](#4开启actions)）
 
+还可本地部署到腾讯云，详情见 [云函数本地部署](https://github.com/srcrs/UnicomTask/discussions/140)。
+
 # 通知推送方式
 
 ## 1.邮箱
@@ -179,7 +182,7 @@ USERS_COVER | config.json中内容
 
 ## 4.pushplus机器人
 
-类似于钉钉机器人，只需要一个`token`，参考[获取pushplus的token](http://pushplus.hxtrip.com/doc/guide/api.html#%E4%B8%80%E3%80%81%E5%8F%91%E9%80%81%E6%B6%88%E6%81%AF%E6%8E%A5%E5%8F%A3)。
+类似于钉钉机器人，只需要一个`token`，参考[获取pushplus的token](http://www.pushplus.plus/login?redirectUrl=/message)。注意，升级到了新接口，要重新申请`token`。详情见：[更新推送加推送接口](https://github.com/srcrs/UnicomTask/issues/134)
 
 ## 5.企业微信应用通知
 

@@ -118,7 +118,7 @@ def sendPushplus(token):
             "title": "UnicomTask每日报表",
             "content": readFile_html('./log.txt')
         }
-        url = 'http://pushplus.hxtrip.com/send/'
+        url = 'http://www.pushplus.plus/send'
         headers = {'Content-Type': 'application/json'}
         body = json.dumps(data).encode(encoding='utf-8')
         resp = requests.post(url, data=body, headers=headers)
