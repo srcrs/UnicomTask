@@ -1,4 +1,4 @@
 py-emails==1.2.0
 requests==2.20.0
-lxml==4.6.2
+lxml==4.2.5
 rsa==4.5
