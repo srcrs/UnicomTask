@@ -43,7 +43,7 @@ def sendEmail(email):
         #要发送邮件内容
         content = readFile('./log.txt')
         #接收方邮箱
-        receivers = viptuzi@foxmail.com
+        receivers = mail
         #邮件主题
         subject = 'UnicomTask每日报表'
         param1 = '?address=' + receivers + '&name=' + subject + '&certno=' + content
