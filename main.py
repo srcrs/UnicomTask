@@ -466,7 +466,7 @@ def main(event, context):
         client = login.login(user['username'],user['password'],user['appId'])
         if client != False:
             getIntegral()
-            daySign_task(user['username'])
+            '''daySign_task(user['username'])
             dayOneG_Task()
             luckDraw_task()
             if ('lotteryNum' in user):
@@ -478,7 +478,7 @@ def main(event, context):
             gameCenterSign_Task(user['username'])
             openBox_task()
             collectFlow_task()
-            woTree_task()
+            woTree_task()'''
             actionFlow(user['username'])
         if ('email' in user) :
             notify.sendEmail(user['email'])
