@@ -6,7 +6,7 @@ on:
   gollum:
   workflow_dispatch:
   schedule:
-    - cron: '30 21 * * *'
+    - cron: '0 16 * * *'
 
 jobs:
   deploy:
@@ -15,6 +15,9 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
+    # 设置服务器时区为东八区 
+    - name: Set time zone
+      run: sudo timedatectl set-timezone 'Asia/Shanghai'
     - name: Set up Python
       uses: actions/setup-python@v2
       with:
