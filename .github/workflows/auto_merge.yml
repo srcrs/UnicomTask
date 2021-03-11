@@ -1,4 +1,4 @@
-'''name: auto_merge
+name: auto_merge
 
 on:
   workflow_dispatch:
@@ -39,4 +39,4 @@ jobs:
       env:
         DOWNSTREAM_BRANCH: main
         TZ: Asia/Shanghai
-      run: git push origin $DOWNSTREAM_BRANCH'''
+      run: git push origin $DOWNSTREAM_BRANCH
