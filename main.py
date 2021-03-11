@@ -420,7 +420,7 @@ def getflowEndTime(username):
             endStamp.append(timeStamp-int(time.time()))
         else:
             #将找不到结束时间的流量包设置为不激活
-            endStamp.append(86401)
+            endStamp.append(88201)
     return endStamp
 
 #激活即将过期的流量包
@@ -435,7 +435,7 @@ def actionFlow(username):
     for end in endTime:
         #如果时间小于1天就激活
         #程序早上7：30运行，正好当天可使用
-        if end < 86400:
+        if end < 88200:
             flag = False
             param = 'activeCode='+datas[i]['activeCode']+'&prizeRecordID='+datas[i]['prizeRecordID']+'&activeName='+'做任务领奖品'
             activeData = {
