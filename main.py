@@ -4,7 +4,8 @@
 # @Email   : srcrs@foxmail.com
 
 import requests,json,time,re,login,logging,traceback,os,random,notify,datetime
-from lxml import etree
+from lxml.html import fromstring
+import pytz
 
 #用户登录全局变量
 client = None
@@ -368,7 +369,7 @@ def getQuerywinning(username):
     #将页面格式化
     doc = f"""{querywinninglist.text}"""
     #转换为html对象
-    html = etree.HTML(doc)
+    html = fromstring(doc)
     return html
 
 #存储并返回未使用的流量包
@@ -397,8 +398,18 @@ def getStorageFlow(username):
         datas.append(data)
     return datas
 
+#获取Asia/Shanghai时区时间戳
+def getTimezone():
+    timezone = pytz.timezone('Asia/Shanghai')
+    dt = datetime.datetime.now(timezone).strftime("%Y-%m-%d %H:%M:%S")
+    timeArray = time.strptime(dt, "%Y-%m-%d %H:%M:%S")
+    timeStamp = int(time.mktime(timeArray))
+    return timeStamp
+
 #获得流量包的还剩多长时间结束，返回形式时间戳
 def getflowEndTime(username):
+    #获得中国时间戳
+    now = getTimezone()
     #获得我的礼包页面对象
     html = getQuerywinning(username)
     #获得流量包到期的时间戳
@@ -417,7 +428,7 @@ def getflowEndTime(username):
             timeArray = time.strptime(end, "%Y-%m-%d %H:%M:%S")
             #得到时间戳
             timeStamp = int(time.mktime(timeArray))
-            endStamp.append(timeStamp-int(time.time()))
+            endStamp.append(timeStamp-now)
         else:
             #将找不到结束时间的流量包设置为不激活
             endStamp.append(86401)
