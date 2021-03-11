@@ -190,6 +190,16 @@ USERS_COVER | config.json中内容
 
 # 同步上游代码
 
+## 将参数填到Secrets
+
+> 注意！为了确保 Push 权限足够，需要 Github Personal access tokens
+
+在`Secrets`中的`Name`和`Value`格式如下：
+
+Name | Value
+-|-
+TOKEN | Github Personal access tokens
+
 在最新的代码中，已经加上自动同步上游代码的`Action`，将会定时在每周五`16`点执行，文件地址在`.github/workflows/auto_merge.yml`。
 
 同时您也可以安装[pull](https://github.com/apps/pull)应用，也可实现自动同步上游代码。
