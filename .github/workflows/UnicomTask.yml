@@ -6,7 +6,7 @@ on:
   gollum:
   workflow_dispatch:
   schedule:
-    - cron: '30 23 * * *'
+    - cron: '30 22 * * *'
 
 jobs:
   deploy:
@@ -25,6 +25,8 @@ jobs:
         key: ${{ runner.os }}-pip-${{ hashFiles('**/run_in_Actions/requirements.txt') }}
         restore-keys: |
           ${{ runner.os }}-pip-
+    - name: Set time zone
+      run: sudo timedatectl set-timezone 'Asia/Shanghai'
     - name: Install dependencies
       run: |
         pip install -r requirements.txt
