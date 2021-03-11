@@ -4,7 +4,7 @@
 # @Email   : srcrs@foxmail.com
 
 import requests,json,time,re,login,logging,traceback,os,random,notify,datetime
-from lxml import etree
+from lxml.html import fromstring
 
 #用户登录全局变量
 client = None
@@ -368,7 +368,7 @@ def getQuerywinning(username):
     #将页面格式化
     doc = f"""{querywinninglist.text}"""
     #转换为html对象
-    html = etree.HTML(doc)
+    html = fromstring(doc)
     return html
 
 #存储并返回未使用的流量包
