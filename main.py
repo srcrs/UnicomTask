@@ -347,7 +347,7 @@ def readJson():
         logging.error('1.请检查是否在Secrets添加了账号信息，以及添加的位置是否正确。')
         logging.error('2.填写之前，是否在网站验证过Json格式的正确性。')
 
-#获取积分余额
+'''#获取积分余额
 def getIntegral():
     try:
         integral = client.post('https://act.10010.com/SigninApp/signin/getIntegral')
@@ -358,7 +358,7 @@ def getIntegral():
     except Exception as e:
         print(traceback.format_exc())
         logging.error('【积分余额】: 错误，原因为: ' + str(e))
-
+'''
 #获得我的礼包页面对象
 def getQuerywinning(username):
     #获得我的礼包页面
@@ -420,7 +420,7 @@ def getflowEndTime(username):
             endStamp.append(timeStamp-int(time.time()))
         else:
             #将找不到结束时间的流量包设置为不激活
-            endStamp.append(88201)
+            endStamp.append(95401)
     return endStamp
 
 #激活即将过期的流量包
@@ -435,7 +435,7 @@ def actionFlow(username):
     for end in endTime:
         #如果时间小于1天就激活
         #程序早上7：30运行，正好当天可使用
-        if end < 88200:
+        if end < 95400:
             flag = False
             param = 'activeCode='+datas[i]['activeCode']+'&prizeRecordID='+datas[i]['prizeRecordID']+'&activeName='+'做任务领奖品'
             activeData = {
@@ -465,8 +465,8 @@ def main(event, context):
         global client
         client = login.login(user['username'],user['password'],user['appId'])
         if client != False:
-            getIntegral()
-            '''daySign_task(user['username'])
+            '''getIntegral()
+            daySign_task(user['username'])
             dayOneG_Task()
             luckDraw_task()
             if ('lotteryNum' in user):
