@@ -150,3 +150,14 @@ def sendWechat(wex):
     message.encoding = 'utf-8'
     res = message.json()
     print('Wechat send : ' + res['errmsg'])
+
+def sendIFTTT(ifttt):
+    try:
+        content = readFile('./log.txt')
+        body = { ifttt['subjectKey']: 'UnicomTask每日报表', ifttt['contentKey']: content }
+        url = 'https://maker.ifttt.com/trigger/{event_name}/with/key/{key}'.format(event_name=ifttt['eventName'], key=ifttt['apiKey'])
+        response = requests.post(url, json=body)
+        print(response)
+    except Exception as e:
+        print('IFTTT通知推送异常，原因为: ' + str(e))
+        print(traceback.format_exc())
