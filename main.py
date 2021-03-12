@@ -5,6 +5,7 @@
 
 import requests,json,time,re,login,logging,traceback,os,random,notify,datetime
 from lxml.html import fromstring
+import pytz
 
 #用户登录全局变量
 client = None
@@ -348,12 +349,16 @@ def readJson():
         logging.error('2.填写之前，是否在网站验证过Json格式的正确性。')
 
 #获取积分余额
+#分类：奖励积分、定向积分、通信积分
 def getIntegral():
     try:
-        integral = client.post('https://act.10010.com/SigninApp/signin/getIntegral')
+        integral = client.post('https://m.client.10010.com/welfare-mall-front/mobile/show/bj2205/v2/Y')
         integral.encoding = 'utf-8'
         res = integral.json()
-        logging.info('【积分余额】: ' + res['data']['integralTotal'])
+        for r in res['resdata']['data']:
+            #排除掉优惠卷日志
+            if r['name'] != '优惠券':
+                logging.info('【'+r['name']+'】: ' + r['number'])
         time.sleep(1)
     except Exception as e:
         print(traceback.format_exc())
@@ -397,8 +402,18 @@ def getStorageFlow(username):
         datas.append(data)
     return datas
 
+#获取Asia/Shanghai时区时间戳
+def getTimezone():
+    timezone = pytz.timezone('Asia/Shanghai')
+    dt = datetime.datetime.now(timezone).strftime("%Y-%m-%d %H:%M:%S")
+    timeArray = time.strptime(dt, "%Y-%m-%d %H:%M:%S")
+    timeStamp = int(time.mktime(timeArray))
+    return timeStamp
+
 #获得流量包的还剩多长时间结束，返回形式时间戳
 def getflowEndTime(username):
+    #获得中国时间戳
+    now = getTimezone()
     #获得我的礼包页面对象
     html = getQuerywinning(username)
     #获得流量包到期的时间戳
@@ -417,7 +432,7 @@ def getflowEndTime(username):
             timeArray = time.strptime(end, "%Y-%m-%d %H:%M:%S")
             #得到时间戳
             timeStamp = int(time.mktime(timeArray))
-            endStamp.append(timeStamp-int(time.time()))
+            endStamp.append(timeStamp-now)
         else:
             #将找不到结束时间的流量包设置为不激活
             endStamp.append(86401)
@@ -456,6 +471,45 @@ def actionFlow(username):
     if flag:
         logging.info('【即将过期流量包】: 暂无')
 
+#防刷校验
+def check():
+    client.headers.update({'referer': 'https://img.client.10010.com'})
+    client.headers.update({'origin': 'https://img.client.10010.com'})
+    data4 = {
+        'methodType': 'queryTaskCenter',
+        'taskCenterId': '',
+        'videoIntegral': '',
+        'isVideo': '',
+        'clientVersion': '8.0100',
+        'deviceType': 'Android'
+    }
+    #在此之间验证是否有防刷校验
+    taskCenter = client.post('https://m.client.10010.com/producGameTaskCenter', data=data4)
+    taskCenter.encoding = 'utf-8'
+    taskCenters = taskCenter.json()
+    gameId = ''
+    for t in taskCenters['data']:
+        if t['task_title'] == '宝箱任务':
+            gameId = t['game_id']
+            break
+    data5 = {
+        'userNumber': 'queryTaskCenter',
+        'methodType': 'flowGet',
+        'gameId': gameId,
+        'clientVersion': '8.0100',
+        'deviceType': 'Android'
+    }
+    producGameApp = client.post('https://m.client.10010.com/producGameApp',data=data5)
+    producGameApp.encoding = 'utf-8'
+    res = producGameApp.json()
+    client.headers.pop('referer')
+    client.headers.pop('origin')
+    if res['code'] == '9999':
+        return True
+    else:
+        logging.info('【娱乐中心任务】: 触发防刷，跳过')
+        return False
+
 #腾讯云函数入口
 def main(event, context):
     users = readJson()
@@ -475,8 +529,9 @@ def main(event, context):
                 pointsLottery_task(0)
             day100Integral_task()
             dongaoPoints_task()
-            gameCenterSign_Task(user['username'])
-            openBox_task()
+            if check():
+                gameCenterSign_Task(user['username'])
+                openBox_task()
             collectFlow_task()
             woTree_task()
             actionFlow(user['username'])
