@@ -157,8 +157,7 @@ def sendIFTTT(ifttt):
         body = { ifttt['subjectKey']: 'UnicomTask每日报表', ifttt['contentKey']: content }
         url = 'https://maker.ifttt.com/trigger/{event_name}/with/key/{key}'.format(event_name=ifttt['eventName'], key=ifttt['apiKey'])
         response = requests.post(url, json=body)
-        resp = requests.post(url, data=body)
-        print(resp)
+        print(response)
     except Exception as e:
         print('IFTTT通知推送异常，原因为: ' + str(e))
         print(traceback.format_exc())
