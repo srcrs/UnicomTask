@@ -194,6 +194,10 @@ USERS_COVER | config.json中内容
 
 通过触发IFTTT的Webhook Trigger来通知到其它任意服务，具体可以参照[IFTTT文档](https://ifttt.com/maker_webhooks)。
 
+## 7.Bark通知
+
+类似于钉钉机器人，只需要一个`Key`，IOS安装Bark即可获取Key[使用文档](https://github.com/Finb/Bark/blob/master/README.md)。
+
 # 同步上游代码
 
 ## 将参数填到Secrets
