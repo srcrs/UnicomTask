@@ -339,7 +339,7 @@ def dayOneG_Task():
 def readJson():
     try:
         #用户配置信息
-        with open('./config.json','r') as fp:
+        with open(os.path.dirname(__file__) + '/config.json','r') as fp:
             users = json.load(fp)
             return users
     except Exception as e:
@@ -515,7 +515,7 @@ def main(event, context):
     users = readJson()
     for user in users:
         #清空上一个用户的日志记录
-        open('./log.txt',mode='w',encoding='utf-8')
+        open(os.path.dirname(__file__) + '/log.txt',mode='w',encoding='utf-8')
         global client
         client = login.login(user['username'],user['password'],user['appId'])
         if client != False:

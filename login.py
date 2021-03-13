@@ -11,7 +11,7 @@ logger = logging.getLogger()
 logger.setLevel(logging.INFO)
 # 创建一个handler，用于写入日志文件
 # w 模式会记住上次日志记录的位置
-fh = logging.FileHandler('./log.txt', mode='a', encoding='utf-8')
+fh = logging.FileHandler(os.path.dirname(__file__) + '/log.txt', mode='a', encoding='utf-8')
 fh.setFormatter(logging.Formatter("%(message)s"))
 logger.addHandler(fh)
 # 创建一个handler，输出到控制台

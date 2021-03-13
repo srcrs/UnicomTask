@@ -41,7 +41,7 @@ def readFile_html(filepath):
 def sendEmail(email):
     try:
         #要发送邮件内容
-        content = readFile('./log.txt')
+        content = readfile(os.path.dirname(__file__) + '/log.txt')
         #接收方邮箱
         receivers = email
         #邮件主题
@@ -67,7 +67,7 @@ def sendEmail(email):
 def sendDing(webhook):
     try:
         #要发送邮件内容
-        content = readFile('./log.txt')
+        content = readfile(os.path.dirname(__file__) + '/log.txt')
         data = {
             'msgtype': 'markdown',
             'markdown': {
@@ -92,7 +92,7 @@ def sendTg(tgBot):
         token = tgBot['tgToken']
         chat_id = tgBot['tgUserId']
         #发送内容
-        content = readFile_text('./log.txt')
+        content = readFile_text(os.path.dirname(__file__) + '/log.txt')
         data = {
             'UnicomTask每日报表':content
         }
@@ -116,7 +116,7 @@ def sendPushplus(token):
         data = {
             "token": token,
             "title": "UnicomTask每日报表",
-            "content": readFile_html('./log.txt')
+            "content": readFile_html(os.path.dirname(__file__) + '/log.txt')
         }
         url = 'http://www.pushplus.plus/send'
         headers = {'Content-Type': 'application/json'}
@@ -137,7 +137,7 @@ def sendWechat(wex):
     token_data = token_data.json()
     access_token = token_data['access_token']
     #发送内容
-    content = readFile_text('./log.txt')
+    content = readFile_text(os.path.dirname(__file__) + '/log.txt')
     #创建要发送的消息
     data = {
         "touser": "@all",
@@ -154,7 +154,7 @@ def sendWechat(wex):
 #发送IFTTT通知
 def sendIFTTT(ifttt):
     try:
-        content = readFile('./log.txt')
+        content = readfile(os.path.dirname(__file__) + '/log.txt')
         body = { ifttt['subjectKey']: 'UnicomTask每日报表', ifttt['contentKey']: content }
         url = 'https://maker.ifttt.com/trigger/{event_name}/with/key/{key}'.format(event_name=ifttt['eventName'], key=ifttt['apiKey'])
         response = requests.post(url, json=body)
@@ -166,7 +166,7 @@ def sendIFTTT(ifttt):
 #发送Bark通知
 def sendBarkkey(Barkkey):
     #发送内容
-    content = readFile_text('./log.txt')
+    content = readFile_text(os.path.dirname(__file__) + '/log.txt')
     data = {
         'UnicomTask每日报表':content
     }
