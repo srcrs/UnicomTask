@@ -308,7 +308,7 @@ def dongaoPoints_task():
     except Exception as e:
         print(traceback.format_exc())
         logging.error('【东奥积分活动】: 错误，原因为: ' + str(e))
-
+'''
 #每日1G流量日包领取
 #位置: 签到 --> 免费领 -->  免费领流量
 def dayOneG_Task():
@@ -331,7 +331,7 @@ def dayOneG_Task():
     except Exception as e:
         print(traceback.format_exc())
         logging.error('【1G流量日包】: 错误，原因为: ' + str(e))
-'''
+
 
 #读取用户配置信息
 #错误原因有两种：格式错误、未读取到错误
@@ -467,8 +467,8 @@ def main(event, context):
         if client != False:
             '''getIntegral()
             daySign_task(user['username'])
-            dayOneG_Task()
-            luckDraw_task()
+            '''dayOneG_Task()
+            '''luckDraw_task()
             if ('lotteryNum' in user):
                 pointsLottery_task(user['lotteryNum'])
             else:
