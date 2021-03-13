@@ -174,5 +174,5 @@ def sendBarkkey(Barkkey):
     url = f'https://api.day.app/{Barkkey}/{content}'
     session = requests.Session()
     resp = session.post(url)
-    state=json.loads(resp.text).get('message')
+    state=json.loads(resp.text)
     print(state)
