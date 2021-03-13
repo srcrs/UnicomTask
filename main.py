@@ -44,7 +44,7 @@ def woTree_task():
     except Exception as e:
         print(traceback.format_exc())
         logging.error('【沃之树】: 错误，原因为: ' + str(e))
-
+'''
 #经多次测试，都可加倍成功了
 #每日签到，1积分 +4 积分(翻倍)，第七天得到 1G 日包
 #位置: 我的 --> 我的金币
@@ -76,7 +76,7 @@ def daySign_task(username):
     except Exception as e:
         print(traceback.format_exc())
         logging.error('【每日签到】: 错误，原因为: ' + str(e))
-
+'''
 #获取 encrymobile，用于抽奖
 def get_encryptmobile():
     page = client.post('https://m.client.10010.com/dailylottery/static/textdl/userLogin')
@@ -465,8 +465,8 @@ def main(event, context):
         global client
         client = login.login(user['username'],user['password'],user['appId'])
         if client != False:
-            '''getIntegral()
-            daySign_task(user['username'])'''
+            '''getIntegral()'''
+            daySign_task(user['username'])
             dayOneG_Task()
             '''luckDraw_task()
             if ('lotteryNum' in user):
