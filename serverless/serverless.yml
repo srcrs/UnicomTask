@@ -10,7 +10,7 @@ inputs:
   src: ./  #代码路径
   handler: main.main #入口
   runtime: Python3.6 # 云函数运行时的环境
-  region: ap-guangzhou # 云函数所在区域
+  region: ap-chengdu # 云函数所在区域
   description: '联通营业厅任务脚本'
   timeout: 900
   events: # 触发器
