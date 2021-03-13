@@ -466,8 +466,8 @@ def main(event, context):
         client = login.login(user['username'],user['password'],user['appId'])
         if client != False:
             '''getIntegral()
-            daySign_task(user['username'])
-            '''dayOneG_Task()
+            daySign_task(user['username'])'''
+            dayOneG_Task()
             '''luckDraw_task()
             if ('lotteryNum' in user):
                 pointsLottery_task(user['lotteryNum'])
