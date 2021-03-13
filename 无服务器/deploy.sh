@@ -19,7 +19,7 @@ sudo -H pip install --upgrade setuptools >/dev/null
 sudo -H pip install -r ./requirements.txt -t ./
 
 #部署至腾讯云函数
-if [ -z "$TENCENT_SECRET_ID" ] || [ -z "$TENCENT_SECRET_KEY" ]; then
+if [ -z "$AKIDd6KJ3Y1pb7OPBhl0nKcfT2MQSJ0U9jU0" ] || [ -z "$QbXEm7DI8i26xYtynMfiV2IKBoCMMBl7" ]; then
   echo "部署至腾讯云需要填写TENCENT_SECRET_ID和TENCENT_SECRET_KEY两个secrets，跳过部署"
 else
   #腾讯云函数貌似只有 /tmp 目录能够临时存取文件
