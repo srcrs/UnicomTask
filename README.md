@@ -127,7 +127,7 @@ USERS_COVER | config.json中内容
 
 ![](https://draw-static.vercel.app/UnicomTask/进行一次push操作.gif)
 
-## 腾讯云函数（推荐）
+## 腾讯云函数
 
 ### 1.fork本项目
 
