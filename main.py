@@ -545,6 +545,10 @@ def main(event, context):
             notify.sendPushplus(user['pushplusToken'])
         if('enterpriseWechat' in user):
             notify.sendWechat(user['enterpriseWechat'])
+        if('IFTTT' in user):
+            notify.sendIFTTT(user['IFTTT'])
+        if('Barkkey' in user):
+            notify.sendBarkkey(user['Barkkey'])
 
 #主函数入口
 if __name__ == '__main__':
