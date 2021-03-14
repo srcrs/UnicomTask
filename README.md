@@ -98,7 +98,7 @@ USERS_COVER | config.json中内容
     {
         "username": "18566669999",
         "password": "123456",
-        "appId": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+        "appId": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
     }
 ]
 ```
