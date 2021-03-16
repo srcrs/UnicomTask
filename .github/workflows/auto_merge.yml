@@ -1,4 +1,4 @@
-name: auto_merge
+﻿name: auto_merge
 
 on:
   workflow_dispatch:
@@ -17,6 +17,7 @@ jobs:
         ref: main
         fetch-depth: 0
         lfs: true
+        token: ${{ secrets.TOKEN }}
 
     - name: Set git identity
       run : |
