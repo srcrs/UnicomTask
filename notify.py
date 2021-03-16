@@ -118,7 +118,7 @@ def sendPushplus(token):
             "title": "UnicomTask每日报表",
             "content": readFile_html('./log.txt')
         }
-        url = 'http://pushplus.hxtrip.com/send/'
+        url = 'http://www.pushplus.plus/send'
         headers = {'Content-Type': 'application/json'}
         body = json.dumps(data).encode(encoding='utf-8')
         resp = requests.post(url, data=body, headers=headers)
@@ -150,3 +150,29 @@ def sendWechat(wex):
     message.encoding = 'utf-8'
     res = message.json()
     print('Wechat send : ' + res['errmsg'])
+
+#发送IFTTT通知
+def sendIFTTT(ifttt):
+    try:
+        content = readFile('./log.txt')
+        body = { ifttt['subjectKey']: 'UnicomTask每日报表', ifttt['contentKey']: content }
+        url = 'https://maker.ifttt.com/trigger/{event_name}/with/key/{key}'.format(event_name=ifttt['eventName'], key=ifttt['apiKey'])
+        response = requests.post(url, json=body)
+        print(response)
+    except Exception as e:
+        print('IFTTT通知推送异常，原因为: ' + str(e))
+        print(traceback.format_exc())
+
+#发送Bark通知
+def sendBarkkey(Barkkey):
+    #发送内容
+    content = readFile_text('./log.txt')
+    data = {
+        'UnicomTask每日报表':content
+    }
+    content = urllib.parse.urlencode(data)
+    url = f'https://api.day.app/{Barkkey}/{content}'
+    session = requests.Session()
+    resp = session.post(url)
+    state=json.loads(resp.text)
+    print(state)
