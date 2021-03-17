@@ -172,4 +172,3 @@ def sendBarkkey(Barkkey):
     res.encoding = 'utf-8'
     res = res.json()
     print('serverchan push : ' + res['errmsg'])
-    print(resp)
