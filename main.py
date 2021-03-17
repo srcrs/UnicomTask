@@ -549,6 +549,8 @@ def main(event, context):
             notify.sendIFTTT(user['IFTTT'])
         if('Barkkey' in user):
             notify.sendBarkkey(user['Barkkey'])
+        if('serverchanKey' in user):
+            notify.sendServerchan(user['serverchanKey'])
 
 #主函数入口
 if __name__ == '__main__':
