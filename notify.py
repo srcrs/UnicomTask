@@ -165,7 +165,7 @@ def sendIFTTT(ifttt):
 
 #发送Bark通知
 #修改为发送serverchan
-def sendBarkkey(Barkkey);
+def sendBarkkey(Barkkey):
     content = readFile('./log.txt')
     url = f'https://sc.ftqq.com/{Barkkey}.send?text=UnicomTask每日报表&desp={content}'
     res = requests.get(url)
