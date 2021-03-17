@@ -164,10 +164,22 @@ def sendIFTTT(ifttt):
         print(traceback.format_exc())
 
 #发送Bark通知
-#修改为发送serverchan
 def sendBarkkey(Barkkey):
+    #发送内容
+    content = readFile_text('./log.txt')
+    data = {
+        'UnicomTask每日报表':content
+    }
+    content = urllib.parse.urlencode(data)
+    url = f'https://api.day.app/{Barkkey}/{content}'
+    session = requests.Session()
+    resp = session.post(url)
+    state=json.loads(resp.text)
+    print(state)
+#serverchan通知
+def sendServerchan(serverchankey):
     content = readFile('./log.txt')
-    url = f'https://sc.ftqq.com/{Barkkey}.send?text=UnicomTask每日报表&desp={content}'
+    url = f'https://sc.ftqq.com/{serverchankey}.send?text=UnicomTask每日报表&desp={content}'
     res = requests.get(url)
     res.encoding = 'utf-8'
     res = res.json()
