@@ -222,16 +222,6 @@ def collectFlow_task():
                 logging.info('【4G流量包-看视频】: 已完成' + ' x' + str(i+1))
             #等待1秒钟
             time.sleep(1)
-            #下软件
-            downloadProg = client.post('https://act.10010.com/SigninApp/mySignin/addFlow',data2)
-            downloadProg.encoding='utf-8'
-            res2 = downloadProg.json()
-            if res2['reason'] == '00':
-                logging.info('【4G流量包-下软件】: 获得' + res2['addNum'] + 'M流量 x' + str(i+1))
-            elif res2['reason'] == '01':
-                logging.info('【4G流量包-下软件】: 已完成' + ' x' + str(i+1))
-            #等待1秒钟
-            time.sleep(1)
     except Exception as e:
         print(traceback.format_exc())
         logging.error('【4G流量包】: 错误，原因为: ' + str(e))
@@ -349,12 +339,15 @@ def readJson():
         logging.error('2.填写之前，是否在网站验证过Json格式的正确性。')
 
 #获取积分余额
+#分类：奖励积分、定向积分、通信积分
 def getIntegral():
     try:
-        integral = client.post('https://act.10010.com/SigninApp/signin/getIntegral')
+        integral = client.post('https://m.client.10010.com/welfare-mall-front/mobile/show/bj2205/v2/Y')
         integral.encoding = 'utf-8'
         res = integral.json()
-        logging.info('【积分余额】: ' + res['data']['integralTotal'])
+        for r in res['resdata']['data']:
+            if r['name'] != None and r['number'] != None:
+                logging.info('【'+str(r['name'])+'】: ' + str(r['number']))
         time.sleep(1)
     except Exception as e:
         print(traceback.format_exc())
@@ -467,6 +460,45 @@ def actionFlow(username):
     if flag:
         logging.info('【即将过期流量包】: 暂无')
 
+#防刷校验
+def check():
+    client.headers.update({'referer': 'https://img.client.10010.com'})
+    client.headers.update({'origin': 'https://img.client.10010.com'})
+    data4 = {
+        'methodType': 'queryTaskCenter',
+        'taskCenterId': '',
+        'videoIntegral': '',
+        'isVideo': '',
+        'clientVersion': '8.0100',
+        'deviceType': 'Android'
+    }
+    #在此之间验证是否有防刷校验
+    taskCenter = client.post('https://m.client.10010.com/producGameTaskCenter', data=data4)
+    taskCenter.encoding = 'utf-8'
+    taskCenters = taskCenter.json()
+    gameId = ''
+    for t in taskCenters['data']:
+        if t['task_title'] == '宝箱任务':
+            gameId = t['game_id']
+            break
+    data5 = {
+        'userNumber': 'queryTaskCenter',
+        'methodType': 'flowGet',
+        'gameId': gameId,
+        'clientVersion': '8.0100',
+        'deviceType': 'Android'
+    }
+    producGameApp = client.post('https://m.client.10010.com/producGameApp',data=data5)
+    producGameApp.encoding = 'utf-8'
+    res = producGameApp.json()
+    client.headers.pop('referer')
+    client.headers.pop('origin')
+    if res['code'] == '9999':
+        return True
+    else:
+        logging.info('【娱乐中心任务】: 触发防刷，跳过')
+        return False
+
 #腾讯云函数入口
 def main(event, context):
     users = readJson()
@@ -486,8 +518,9 @@ def main(event, context):
                 pointsLottery_task(0)
             day100Integral_task()
             dongaoPoints_task()
-            gameCenterSign_Task(user['username'])
-            openBox_task()
+            if check():
+                gameCenterSign_Task(user['username'])
+                openBox_task()
             collectFlow_task()
             woTree_task()
             actionFlow(user['username'])
@@ -501,6 +534,10 @@ def main(event, context):
             notify.sendPushplus(user['pushplusToken'])
         if('enterpriseWechat' in user):
             notify.sendWechat(user['enterpriseWechat'])
+        if('IFTTT' in user):
+            notify.sendIFTTT(user['IFTTT'])
+        if('Barkkey' in user):
+            notify.sendBarkkey(user['Barkkey'])
 
 #主函数入口
 if __name__ == '__main__':

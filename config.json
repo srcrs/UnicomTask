@@ -6,6 +6,7 @@
         "email": "邮箱（选填，不填请删除此行）",
         "lotteryNum": "抽奖次数（选填，不填请删除此行）",
         "dingtalkWebhook": "钉钉通知 https://oapi.dingtalk.com/robot/send?access_token=xxxx（选填，不填请删除此行）",
+        "Barkkey": "Bark通知 key（选填，不填请删除此行） ",
         "telegramBot": {
             "tgToken": "Tg通知 token（选填，不填请删除 telegramBot 对象）",
             "tgUserId": "Tg通知 群组Id（选填，不填请删除 telegramBot 对象）"
@@ -15,6 +16,12 @@
             "id": "企业ID（选填，不填请删除 enterpriseWechat 对象）",
             "agentld": "企业微信自建应用AgentId（选填，不填请删除 enterpriseWechat 对象）",
             "secret": "企业微信自建应用Secrets（选填不填请删除 enterpriseWechat 对象）"
+        },
+        "IFTTT": {
+            "apiKey": "IFTTT Webhook key",
+            "eventName": "unicom_task",
+            "subjectKey": "比如value1",
+            "contentKey": "比如value2"
         }
     }
 ]
