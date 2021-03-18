@@ -435,7 +435,7 @@ def getflowEndTime(username):
             endStamp.append(timeStamp-now)
         else:
             #将找不到结束时间的流量包设置为不激活
-            endStamp.append(86401)
+            endStamp.append(86399)
     return endStamp
 
 #激活即将过期的流量包
