@@ -2,8 +2,8 @@
     {
         "username": "18577346057",
         "password": "681193",
-        "appId": "appId（必填）",
-        "email": "邮箱（选填，不填请删除此行）",
+        "appId": "af8ceac06275e6af2826a3cf6ea168d6736516f2e2d70994dd7748620a97ad4eca100d22b66554b0413488e53a152e717581f09ed60d0b6ad9bd399b477668aeb40e08666332ebea344ef698faa0a0bd",
+        "email": "550374274@qq.com",
         "lotteryNum": "抽奖次数（选填，不填请删除此行）",
         "dingtalkWebhook": "钉钉通知 https://oapi.dingtalk.com/robot/send?access_token=xxxx（选填，不填请删除此行）",
         "Barkkey": "Bark通知 key（选填，不填请删除此行） ",
