@@ -222,16 +222,6 @@ def collectFlow_task():
                 logging.info('【4G流量包-看视频】: 已完成' + ' x' + str(i+1))
             #等待1秒钟
             time.sleep(1)
-            #下软件
-            downloadProg = client.post('https://act.10010.com/SigninApp/mySignin/addFlow',data2)
-            downloadProg.encoding='utf-8'
-            res2 = downloadProg.json()
-            if res2['reason'] == '00':
-                logging.info('【4G流量包-下软件】: 获得' + res2['addNum'] + 'M流量 x' + str(i+1))
-            elif res2['reason'] == '01':
-                logging.info('【4G流量包-下软件】: 已完成' + ' x' + str(i+1))
-            #等待1秒钟
-            time.sleep(1)
     except Exception as e:
         print(traceback.format_exc())
         logging.error('【4G流量包】: 错误，原因为: ' + str(e))
@@ -356,9 +346,8 @@ def getIntegral():
         integral.encoding = 'utf-8'
         res = integral.json()
         for r in res['resdata']['data']:
-            #排除掉优惠卷日志
-            if r['name'] != '优惠券':
-                logging.info('【'+r['name']+'】: ' + r['number'])
+            if r['name'] != None and r['number'] != None:
+                logging.info('【'+str(r['name'])+'】: ' + str(r['number']))
         time.sleep(1)
     except Exception as e:
         print(traceback.format_exc())
@@ -547,8 +536,8 @@ def main(event, context):
             notify.sendWechat(user['enterpriseWechat'])
         if('IFTTT' in user):
             notify.sendIFTTT(user['IFTTT'])
-        if('Barkkey' in user):
-            notify.sendBarkkey(user['Barkkey'])
+        if('Bark' in user):
+            notify.sendBark(user['Bark'])
 
 #主函数入口
 if __name__ == '__main__':
