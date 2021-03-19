@@ -151,6 +151,7 @@ def sendWechat(wex):
     res = message.json()
     print('Wechat send : ' + res['errmsg'])
 
+#发送IFTTT通知
 def sendIFTTT(ifttt):
     try:
         content = readFile('./log.txt')
@@ -161,3 +162,20 @@ def sendIFTTT(ifttt):
     except Exception as e:
         print('IFTTT通知推送异常，原因为: ' + str(e))
         print(traceback.format_exc())
+
+#发送Bark通知
+def sendBark(Bark):
+    #发送内容
+    Barkkey = Bark['Barkkey']
+    Barksave = Bark['Barksave']
+    content = readFile_text('./log.txt')
+    data = {
+        "title": "UnicomTask每日报表",
+        "body": content
+    }
+    headers = {'Content-Type': 'application/json;charset=utf-8'}
+    url = f'https://api.day.app/{Barkkey}/?isArchive={Barksave}'
+    session = requests.Session()
+    resp = session.post(url, json = data, headers = headers)
+    state=json.loads(resp.text)
+    print(state)
