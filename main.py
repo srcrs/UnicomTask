@@ -516,6 +516,14 @@ def main(event, context):
     for user in users:
         #清空上一个用户的日志记录
         open('./log.txt',mode='w',encoding='utf-8')
+
+        mobile = user['username']
+        ## 联通活动 不需要登录
+        url0 = f'https://wap.10010hb.net/zinfo/activity/mobilePrize/getAward?serialNumber={mobile}'
+        session = requests.Session()
+        resp = session.post(url0,'{}');
+        print(resp.text)
+
         global client
         client = login.login(user['username'],user['password'],user['appId'])
         if client != False:
