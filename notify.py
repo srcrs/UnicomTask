@@ -164,15 +164,18 @@ def sendIFTTT(ifttt):
         print(traceback.format_exc())
 
 #发送Bark通知
-def sendBarkkey(Barkkey):
+def sendBark(Bark):
     #发送内容
+    Barkkey = Bark['Barkkey']
+    Barksave = Bark['Barksave']
     content = readFile_text('./log.txt')
     data = {
-        'UnicomTask每日报表':content
+        "title": "UnicomTask每日报表",
+        "body": content
     }
-    content = urllib.parse.urlencode(data)
-    url = f'https://api.day.app/{Barkkey}/{content}'
+    headers = {'Content-Type': 'application/json;charset=utf-8'}
+    url = f'https://api.day.app/{Barkkey}/?isArchive={Barksave}'
     session = requests.Session()
-    resp = session.post(url)
+    resp = session.post(url, json = data, headers = headers)
     state=json.loads(resp.text)
     print(state)
