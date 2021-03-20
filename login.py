@@ -3,7 +3,7 @@
 # @Author  : srcrs
 # @Email   : srcrs@foxmail.com
 
-import base64,rsa,time,requests,logging,traceback,os
+import base64,rsa,time,requests,logging,traceback,os,json
 
 #日志基础配置
 # 创建一个logger
@@ -49,6 +49,25 @@ def str2key(s):
 
     return modulus,exponent
 
+def getsession(username):
+    try:
+        with open(f'./session_{username[-4:]}.json', 'r', encoding="utf8") as f:
+            data = json.load(f)
+    except:
+        data = ""
+    return data
+
+def savesession(username, session):
+    try:
+        d = {}
+        d["cookies"] = session.cookies.get_dict()
+        d["headers"] = dict(session.headers)
+        with open(f'./session_{username[-4:]}.json', 'w', encoding="utf8") as f:
+            json.dump(d, f, ensure_ascii=False)
+        return 1
+    except:
+        return 0
+
 #对手机号和登录密码进行加密
 def encryption(message,key):
     modulus = int(key[0], 16)
@@ -61,6 +80,7 @@ def encryption(message,key):
 #进行登录
 #手机号和密码加密代码，参考自这篇文章 http://www.bubuko.com/infodetail-2349299.html?&_=1524316738826
 def login(username,password,appId):
+    ousername = username
     global session
     session = requests.Session()
     #rsa 公钥
@@ -72,6 +92,14 @@ def login(username,password,appId):
     password = encryption(str.encode(password),key)
     #appId 联通后端会验证这个值,如不是常登录设备会触发验证码登录
     #appId = os.environ.get('APPID_COVER')
+    data = getsession(ousername)
+    if data:
+        logger.info('【登录】: ' + ousername[-4:] + '读取cookies成功！')
+        cookies = data["cookies"]
+        headers = data["headers"]
+        session.cookies.update(cookies)
+        session.headers.update(headers)
+        return session
     #设置一个标志，用户是否登录成功
     flag = False
     
@@ -130,6 +158,11 @@ def login(username,password,appId):
         print(traceback.format_exc())
         logger.error('【登录】: 发生错误，原因为: ' + str(e))
     if flag:
+        code = savesession(ousername, session)
+        if code:
+            logger.info('【登录】: save session ok')
+        else:
+            logger.error('【登录】: save session error')
         return session
     else:
         return False
