@@ -53,6 +53,7 @@
 * [x] 获取每日1G流量日包(截止日期暂时不知道)
 * [x] 邮件、钉钉、Tg、企业微信等推送运行结果
 * [x] 自动激活即将过期流量包（到期时间1天内）
+* [X] 每月领取1G流量包（仅限湖北用户） 
 
 # 使用方式
 
@@ -227,4 +228,4 @@ TOKEN | Github Personal access tokens
 
 [mixool/HiCnUnicom](https://github.com/mixool/HiCnUnicom)，感谢该项目对于登录部分的思路
 
-[happy888888/BiliExp](https://github.com/happy888888/BiliExp)，参考了该项目的云函数实现 
+[happy888888/BiliExp](https://github.com/happy888888/BiliExp)，参考了该项目的云函数实现
