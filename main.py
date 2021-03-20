@@ -499,6 +499,22 @@ def check():
         logging.info('【娱乐中心任务】: 触发防刷，跳过')
         return False
 
+#每月领取1G流量包，仅限湖北用户
+#位置：暂时不清楚
+def monthOneG(username):
+    #获取当前是本月几号
+    now = getTimezone()
+    timeArray = time.localtime(now)
+    day = time.strftime("%d",timeArray)
+    ## 联通活动 不需要登录
+    url = f'https://wap.10010hb.net/zinfo/activity/mobilePrize/getAward?serialNumber={username}'
+    #每月3号领取
+    if day==3:
+        award = client.post(url,'{}')
+        award.encoding = 'utf-8'
+        res = award.json()
+        logging.info('【每月领取1G】: ' + res['alertMsg'])
+
 #腾讯云函数入口
 def main(event, context):
     users = readJson()
@@ -524,6 +540,7 @@ def main(event, context):
             collectFlow_task()
             woTree_task()
             actionFlow(user['username'])
+            monthOneG(user['username'])
         if ('email' in user) :
             notify.sendEmail(user['email'])
         if ('dingtalkWebhook' in user) :
