@@ -161,7 +161,7 @@ USERS_COVER | config.json中内容
 
 ### 4.部署
 
-* 添加完上面`3`个`Secrets`后，进入`Actions`(上面那个不是`Secrets`下面那个) --> `deploy for serverless`，点击右边的`Run workflow`即可部署至腾讯云函数(如果出错请在红叉右边点击`deploy for serverless`查看部署任务的输出信息找出错误原因)。
+* 添加完上面`3`个`Secrets`后，进入`Actions`(repo 页面顶部`Pull Requests`右侧那个不是`Settings`界面左侧的两个) --> `deploy for serverless`，点击右边的`Run workflow`即可部署至腾讯云函数(如果出错请在红叉右边点击`deploy for serverless`查看部署任务的输出信息找出错误原因)。
 
 * 首次`fork`可能要去`Actions`里面同意使用`Actions`条款，如果`Actions`里面没有`deploy for serverless`，点一下右上角的`star`，`deploy for serverless`就会出现在`Actions`里面。（参考[4.开启Actions](#4开启actions)）
 
