@@ -36,15 +36,3 @@ jobs:
       run: |
         echo "$USERS_COVER" > ./config.json
         python main.py
-    - name: Build and publish2
-      env:
-        USERS_COVER: ${{ secrets.USERS_COVER2 }}
-      run: |
-        echo "$USERS_COVER" > ./config.json
-        python main.py
-    - name: Build and publish3
-      env:
-        USERS_COVER: ${{ secrets.USERS_COVER3 }}
-      run: |
-        echo "$USERS_COVER" > ./config.json
-        python main.py
