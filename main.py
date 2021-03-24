@@ -207,9 +207,6 @@ def collectFlow_task():
         'stepflag': '22'
     }
     
-    data2 = {
-        'stepflag': '23'
-    }
     try:
         for i in range(3):
             #看视频
@@ -220,16 +217,6 @@ def collectFlow_task():
                 logging.info('【4G流量包-看视频】: 获得' + res1['addNum'] + 'M流量 x' + str(i+1))
             elif res1['reason'] == '01':
                 logging.info('【4G流量包-看视频】: 已完成' + ' x' + str(i+1))
-            #等待1秒钟
-            time.sleep(1)
-            #下软件
-            downloadProg = client.post('https://act.10010.com/SigninApp/mySignin/addFlow',data2)
-            downloadProg.encoding='utf-8'
-            res2 = downloadProg.json()
-            if res2['reason'] == '00':
-                logging.info('【4G流量包-下软件】: 获得' + res2['addNum'] + 'M流量 x' + str(i+1))
-            elif res2['reason'] == '01':
-                logging.info('【4G流量包-下软件】: 已完成' + ' x' + str(i+1))
             #等待1秒钟
             time.sleep(1)
     except Exception as e:
@@ -356,9 +343,8 @@ def getIntegral():
         integral.encoding = 'utf-8'
         res = integral.json()
         for r in res['resdata']['data']:
-            #排除掉优惠卷日志
-            if r['name'] != '优惠券':
-                logging.info('【'+r['name']+'】: ' + r['number'])
+            if r['name'] != None and r['number'] != None:
+                logging.info('【'+str(r['name'])+'】: ' + str(r['number']))
         time.sleep(1)
     except Exception as e:
         print(traceback.format_exc())
@@ -452,7 +438,6 @@ def actionFlow(username):
         #程序早上7：30运行，正好当天可使用
         if end < 86400:
             flag = False
-            param = 'activeCode='+datas[i]['activeCode']+'&prizeRecordID='+datas[i]['prizeRecordID']+'&activeName='+'做任务领奖品'
             activeData = {
                 'activeCode': datas[i]['activeCode'],
                 'prizeRecordID': datas[i]['prizeRecordID'],
@@ -510,6 +495,22 @@ def check():
         logging.info('【娱乐中心任务】: 触发防刷，跳过')
         return False
 
+#每月领取1G流量包，仅限湖北用户
+#位置：暂时不清楚
+def monthOneG(username):
+    #获取当前是本月几号
+    now = getTimezone()
+    timeArray = time.localtime(now)
+    day = time.strftime("%d",timeArray)
+    ## 联通活动 不需要登录
+    url = f'https://wap.10010hb.net/zinfo/activity/mobilePrize/getAward?serialNumber={username}'
+    #每月3号领取
+    if day==3:
+        award = client.post(url,'{}')
+        award.encoding = 'utf-8'
+        res = award.json()
+        logging.info('【每月领取1G】: ' + res['alertMsg'])
+
 #腾讯云函数入口
 def main(event, context):
     users = readJson()
@@ -535,6 +536,7 @@ def main(event, context):
             collectFlow_task()
             woTree_task()
             actionFlow(user['username'])
+            monthOneG(user['username'])
         if ('email' in user) :
             notify.sendEmail(user['email'])
         if ('dingtalkWebhook' in user) :
@@ -547,8 +549,8 @@ def main(event, context):
             notify.sendWechat(user['enterpriseWechat'])
         if('IFTTT' in user):
             notify.sendIFTTT(user['IFTTT'])
-        if('Barkkey' in user):
-            notify.sendBarkkey(user['Barkkey'])
+        if('Bark' in user):
+            notify.sendBark(user['Bark'])
 
 #主函数入口
 if __name__ == '__main__':
