@@ -436,7 +436,7 @@ def actionFlow(username):
     for end in endTime:
         #如果时间小于1天就激活
         #程序早上7：30运行，正好当天可使用
-        if end < 86400:
+        if end < 259200:
             flag = False
             activeData = {
                 'activeCode': datas[i]['activeCode'],
