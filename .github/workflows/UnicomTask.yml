@@ -1,28 +1,28 @@
-#name: UnicomTask
+name: UnicomTask
 
-#on:
-  #push:
-#    branches: main
-#  gollum:
- # workflow_dispatch:
-#  schedule:
-#   - cron: '30 22 * * *'
+on:
+  push:
+    branches: main
+  gollum:
+  workflow_dispatch:
+  schedule:
+   - cron: '30 22 * * *'
 
-#jobs:
-#  deploy:
-#
-#    runs-on: ubuntu-latest
-#
-#    steps:
- #   - uses: actions/checkout@v2
- #   - name: Set up Python
-  #    uses: actions/setup-python@v2
- #     with:
- #       python-version: '3.x'
- #   - uses: actions/cache@v2
- #     with:
- #       path: ~/.cache/pip
- #       key: ${{ runner.os }}-pip-${{ hashFiles('**/run_in_Actions/requirements.txt') }}
+jobs:
+  deploy:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.x'
+    - uses: actions/cache@v2
+      with:
+        path: ~/.cache/pip
+        key: ${{ runner.os }}-pip-${{ hashFiles('**/run_in_Actions/requirements.txt') }}
         restore-keys: |
           ${{ runner.os }}-pip-
     - name: Set time zone
