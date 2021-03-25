@@ -1,30 +1,9 @@
 [
     {
-        "username": "手机号（必填）",
-        "password": "服务密码（必填）",
-        "appId": "appId（必填）",
-        "email": "邮箱（选填，不填请删除此行）",
-        "lotteryNum": "抽奖次数（选填，不填请删除此行）",
-        "dingtalkWebhook": "钉钉通知 https://oapi.dingtalk.com/robot/send?access_token=xxxx（选填，不填请删除此行）",
-        "Bark": {
-            "Barkkey": "（选填，不填请删除 Bark 对象）",
-            "Barksave": "//是否需要保存推送信息到历史记录，1 为保存，其他值为不保存。（选填，不填请删除 Bark 对象）"
-        },
-        "telegramBot": {
-            "tgToken": "Tg通知 token（选填，不填请删除 telegramBot 对象）",
-            "tgUserId": "Tg通知 群组Id（选填，不填请删除 telegramBot 对象）"
-        },
-        "pushplusToken": "push+ token（选填，不填请删除此行）",
-        "enterpriseWechat": {
-            "id": "企业ID（选填，不填请删除 enterpriseWechat 对象）",
-            "agentld": "企业微信自建应用AgentId（选填，不填请删除 enterpriseWechat 对象）",
-            "secret": "企业微信自建应用Secrets（选填不填请删除 enterpriseWechat 对象）"
-        },
-        "IFTTT": {
-            "apiKey": "IFTTT Webhook key",
-            "eventName": "unicom_task",
-            "subjectKey": "比如value1",
-            "contentKey": "比如value2"
-        }
+        "username": "13005026493",
+        "password": "002008",
+        "appId": "bcbf9239dffadd5449045269ab5346e85439a50d682cd0304af40f74ae4156c92e88b020b8dfca1e931eeda2b2d8a67ba13fc95d486bfd5453c30169ea33cd03fd917bc43eaccf7f0e4a3589dcf0cb8b",
+        "email": "147621629@qq.com",
+        "lotteryNum": "3",
     }
 ]
