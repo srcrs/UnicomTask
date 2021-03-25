@@ -324,6 +324,8 @@ def dayOneG_Task():
         client.post('https://act.10010.com/SigninApp/doTask/getTaskInfo')
         res1 = getTaskInfo.json()
         res2 = getPrize.json()
+        logging.info('getTaskInfo:'+res1)
+        logging.info('getPrize:'+res2)
         if(res1['data']['taskInfo']['status'] == '1'):
             logging.info('【1G流量日包】: ' + res2['data']['statusDesc'])
         else:
