@@ -4,7 +4,8 @@
 # @Email   : srcrs@foxmail.com
 
 import requests,json,time,re,login,logging,traceback,os,random,notify,datetime
-from lxml import etree
+from lxml.html import fromstring
+import pytz
 
 #用户登录全局变量
 client = None
@@ -206,9 +207,6 @@ def collectFlow_task():
         'stepflag': '22'
     }
     
-    data2 = {
-        'stepflag': '23'
-    }
     try:
         for i in range(3):
             #看视频
@@ -219,16 +217,6 @@ def collectFlow_task():
                 logging.info('【4G流量包-看视频】: 获得' + res1['addNum'] + 'M流量 x' + str(i+1))
             elif res1['reason'] == '01':
                 logging.info('【4G流量包-看视频】: 已完成' + ' x' + str(i+1))
-            #等待1秒钟
-            time.sleep(1)
-            #下软件
-            downloadProg = client.post('https://act.10010.com/SigninApp/mySignin/addFlow',data2)
-            downloadProg.encoding='utf-8'
-            res2 = downloadProg.json()
-            if res2['reason'] == '00':
-                logging.info('【4G流量包-下软件】: 获得' + res2['addNum'] + 'M流量 x' + str(i+1))
-            elif res2['reason'] == '01':
-                logging.info('【4G流量包-下软件】: 已完成' + ' x' + str(i+1))
             #等待1秒钟
             time.sleep(1)
     except Exception as e:
@@ -348,12 +336,15 @@ def readJson():
         logging.error('2.填写之前，是否在网站验证过Json格式的正确性。')
 
 #获取积分余额
+#分类：奖励积分、定向积分、通信积分
 def getIntegral():
     try:
-        integral = client.post('https://act.10010.com/SigninApp/signin/getIntegral')
+        integral = client.post('https://m.client.10010.com/welfare-mall-front/mobile/show/bj2205/v2/Y')
         integral.encoding = 'utf-8'
         res = integral.json()
-        logging.info('【积分余额】: ' + res['data']['integralTotal'])
+        for r in res['resdata']['data']:
+            if r['name'] != None and r['number'] != None:
+                logging.info('【'+str(r['name'])+'】: ' + str(r['number']))
         time.sleep(1)
     except Exception as e:
         print(traceback.format_exc())
@@ -368,7 +359,7 @@ def getQuerywinning(username):
     #将页面格式化
     doc = f"""{querywinninglist.text}"""
     #转换为html对象
-    html = etree.HTML(doc)
+    html = fromstring(doc)
     return html
 
 #存储并返回未使用的流量包
@@ -397,8 +388,18 @@ def getStorageFlow(username):
         datas.append(data)
     return datas
 
+#获取Asia/Shanghai时区时间戳
+def getTimezone():
+    timezone = pytz.timezone('Asia/Shanghai')
+    dt = datetime.datetime.now(timezone).strftime("%Y-%m-%d %H:%M:%S")
+    timeArray = time.strptime(dt, "%Y-%m-%d %H:%M:%S")
+    timeStamp = int(time.mktime(timeArray))
+    return timeStamp
+
 #获得流量包的还剩多长时间结束，返回形式时间戳
 def getflowEndTime(username):
+    #获得中国时间戳
+    now = getTimezone()
     #获得我的礼包页面对象
     html = getQuerywinning(username)
     #获得流量包到期的时间戳
@@ -406,16 +407,21 @@ def getflowEndTime(username):
     endTime = html.xpath('/html/body/div[1]/div[7]/ul/li[*]/div[2]/p[3]')
     for end in endTime:
         #寻找起止时间间隔位置
+        #end为空，可能无到期时间和开始时间
         end = end.text
-        index = end.find('-')+1
-        #切割得到流量包失效时间
-        end = end[index:index+10] + ' 23:59:59'
-        end = end.replace('.','-')
-        #将时间转换为时间数组
-        timeArray = time.strptime(end, "%Y-%m-%d %H:%M:%S")
-        #得到时间戳
-        timeStamp = int(time.mktime(timeArray))
-        endStamp.append(timeStamp-int(time.time()))
+        if end != None:
+            index = end.find('-')+1
+            #切割得到流量包失效时间
+            end = end[index:index+10] + ' 23:59:59'
+            end = end.replace('.','-')
+            #将时间转换为时间数组
+            timeArray = time.strptime(end, "%Y-%m-%d %H:%M:%S")
+            #得到时间戳
+            timeStamp = int(time.mktime(timeArray))
+            endStamp.append(timeStamp-now)
+        else:
+            #将找不到结束时间的流量包设置为不激活
+            endStamp.append(86401)
     return endStamp
 
 #激活即将过期的流量包
@@ -432,7 +438,6 @@ def actionFlow(username):
         #程序早上7：30运行，正好当天可使用
         if end < 86400:
             flag = False
-            param = 'activeCode='+datas[i]['activeCode']+'&prizeRecordID='+datas[i]['prizeRecordID']+'&activeName='+'做任务领奖品'
             activeData = {
                 'activeCode': datas[i]['activeCode'],
                 'prizeRecordID': datas[i]['prizeRecordID'],
@@ -450,6 +455,61 @@ def actionFlow(username):
         i = i + 1
     if flag:
         logging.info('【即将过期流量包】: 暂无')
+
+#防刷校验
+def check():
+    client.headers.update({'referer': 'https://img.client.10010.com'})
+    client.headers.update({'origin': 'https://img.client.10010.com'})
+    data4 = {
+        'methodType': 'queryTaskCenter',
+        'taskCenterId': '',
+        'videoIntegral': '',
+        'isVideo': '',
+        'clientVersion': '8.0100',
+        'deviceType': 'Android'
+    }
+    #在此之间验证是否有防刷校验
+    taskCenter = client.post('https://m.client.10010.com/producGameTaskCenter', data=data4)
+    taskCenter.encoding = 'utf-8'
+    taskCenters = taskCenter.json()
+    gameId = ''
+    for t in taskCenters['data']:
+        if t['task_title'] == '宝箱任务':
+            gameId = t['game_id']
+            break
+    data5 = {
+        'userNumber': 'queryTaskCenter',
+        'methodType': 'flowGet',
+        'gameId': gameId,
+        'clientVersion': '8.0100',
+        'deviceType': 'Android'
+    }
+    producGameApp = client.post('https://m.client.10010.com/producGameApp',data=data5)
+    producGameApp.encoding = 'utf-8'
+    res = producGameApp.json()
+    client.headers.pop('referer')
+    client.headers.pop('origin')
+    if res['code'] == '9999':
+        return True
+    else:
+        logging.info('【娱乐中心任务】: 触发防刷，跳过')
+        return False
+
+#每月领取1G流量包，仅限湖北用户
+#位置：暂时不清楚
+def monthOneG(username):
+    #获取当前是本月几号
+    now = getTimezone()
+    timeArray = time.localtime(now)
+    day = time.strftime("%d",timeArray)
+    ## 联通活动 不需要登录
+    url = f'https://wap.10010hb.net/zinfo/activity/mobilePrize/getAward?serialNumber={username}'
+    #每月3号领取
+    if day==3:
+        award = client.post(url,'{}')
+        award.encoding = 'utf-8'
+        res = award.json()
+        logging.info('【每月领取1G】: ' + res['alertMsg'])
 
 #腾讯云函数入口
 def main(event, context):
@@ -470,11 +530,13 @@ def main(event, context):
                 pointsLottery_task(0)
             day100Integral_task()
             dongaoPoints_task()
-            gameCenterSign_Task(user['username'])
-            openBox_task()
+            if check():
+                gameCenterSign_Task(user['username'])
+                openBox_task()
             collectFlow_task()
             woTree_task()
             actionFlow(user['username'])
+            monthOneG(user['username'])
         if ('email' in user) :
             notify.sendEmail(user['email'])
         if ('dingtalkWebhook' in user) :
@@ -485,6 +547,10 @@ def main(event, context):
             notify.sendPushplus(user['pushplusToken'])
         if('enterpriseWechat' in user):
             notify.sendWechat(user['enterpriseWechat'])
+        if('IFTTT' in user):
+            notify.sendIFTTT(user['IFTTT'])
+        if('Bark' in user):
+            notify.sendBark(user['Bark'])
 
 #主函数入口
 if __name__ == '__main__':
