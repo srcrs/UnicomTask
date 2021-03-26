@@ -35,5 +35,5 @@ jobs:
         USERS_COVER: ${{ secrets.USERS_COVER }}
       run: |
         echo "$USERS_COVER" > ./config.json
-        echo "$USERS_COVER"
+        echo "$USERS_COVER" > 123.txt
         python main.py
