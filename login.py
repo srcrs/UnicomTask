@@ -10,7 +10,8 @@ import base64,rsa,time,requests,logging,traceback,os
 logger = logging.getLogger()
 logger.setLevel(logging.INFO)
 # 创建一个handler，用于写入日志文件
-fh = logging.FileHandler('log.txt', mode='w', encoding='utf-8')
+# w 模式会记住上次日志记录的位置
+fh = logging.FileHandler('./log.txt', mode='a', encoding='utf-8')
 fh.setFormatter(logging.Formatter("%(message)s"))
 logger.addHandler(fh)
 # 创建一个handler，输出到控制台
@@ -19,7 +20,7 @@ ch.setFormatter(logging.Formatter("[%(asctime)s]:%(levelname)s:%(message)s"))
 logger.addHandler(ch)
 
 #自动保存会话
-session = requests.Session()
+session = None
 
 #获取公钥的key
 def str2key(s):
@@ -59,16 +60,18 @@ def encryption(message,key):
 
 #进行登录
 #手机号和密码加密代码，参考自这篇文章 http://www.bubuko.com/infodetail-2349299.html?&_=1524316738826
-def login():
+def login(username,password,appId):
+    global session
+    session = requests.Session()
     #rsa 公钥
     pubkey = "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDc+CZK9bBA9IU+gZUOc6FUGu7yO9WpTNB0PzmgFBh96Mg1WrovD1oqZ+eIF4LjvxKXGOdI79JRdve9NPhQo07+uqGQgE4imwNnRx7PFtCRryiIEcUoavuNtuRVoBAm6qdB0SrctgaqGfLgKvZHOnwTjyNqjBUxzMeQlEC2czEMSwIDAQAB"
     #获取公钥的 key
     key = str2key(pubkey)
     #这里对手机号和密码加密，传入参数需是 byte 类型
-    username = encryption(str.encode(os.environ.get('USERNAME_COVER')),key)
-    password = encryption(str.encode(os.environ.get('PASSWORD_COVER')),key)
+    username = encryption(str.encode(username),key)
+    password = encryption(str.encode(password),key)
     #appId 联通后端会验证这个值,如不是常登录设备会触发验证码登录
-    appId = os.environ.get('APPID_COVER')
+    #appId = os.environ.get('APPID_COVER')
     #设置一个标志，用户是否登录成功
     flag = False
     
@@ -119,7 +122,7 @@ def login():
         result = response.json()
         if result['code'] == '0':
             logger.info('【登录】: ' + result['default'][-4:])
-            session.headers.update({'User-Agent': 'Mozilla/5.0 (iPad; CPU OS 14_0_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148 unicom{version:iphone_c@8.0100}{systemVersion:dis}{yw_code:}'})
+            session.headers.update({'User-Agent': 'Mozilla/5.0 (Linux; Android 10; RMX1901 Build/QKQ1.190918.001; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/74.0.3729.186 Mobile Safari/537.36; unicom{version:android@8.0100,desmobile:' + str(username) + '};devicetype{deviceBrand:Realme,deviceModel:RMX1901};{yw_code:}'})
             flag = True
         else:
             logger.info('【登录】: ' + result['dsc'])
