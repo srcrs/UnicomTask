@@ -6,7 +6,10 @@
         "email": "邮箱（选填，不填请删除此行）",
         "lotteryNum": "抽奖次数（选填，不填请删除此行）",
         "dingtalkWebhook": "钉钉通知 https://oapi.dingtalk.com/robot/send?access_token=xxxx（选填，不填请删除此行）",
-        "Barkkey": "Bark通知 key（选填，不填请删除此行） ",
+        "Bark": {
+            "Barkkey": "（选填，不填请删除 Bark 对象）",
+            "Barksave": "//是否需要保存推送信息到历史记录，1 为保存，其他值为不保存。（选填，不填请删除 Bark 对象）"
+        },
         "telegramBot": {
             "tgToken": "Tg通知 token（选填，不填请删除 telegramBot 对象）",
             "tgUserId": "Tg通知 群组Id（选填，不填请删除 telegramBot 对象）"
