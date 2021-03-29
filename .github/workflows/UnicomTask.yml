@@ -1,13 +1,18 @@
 name: UnicomTask
 
 on:
-  push:
-    branches: main
-  gollum:
-  workflow_dispatch:
-  
-   CRON_TZ=Asia/Shanghai TZ=Asia/Shanghai- cron: '0 0,23 * * *'
 
+   push:
+
+     branches: main
+
+   gollum:
+
+   workflow_dispatch:
+
+   schedule:
+
+       - cron: '0 16 * * *'
 jobs:
   deploy:
 
