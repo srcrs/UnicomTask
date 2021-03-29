@@ -12,7 +12,7 @@ on:
 
    schedule:
 
-       - cron: '0 16 * * *'
+       - cron: '30 15,16 * * *'
 jobs:
   deploy:
 
