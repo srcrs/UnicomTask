@@ -6,7 +6,7 @@ on:
   gollum:
   workflow_dispatch:
   
-   CRON_TZ=Asia/Taipei TZ=Asia/Taipei- cron: '0 15,16 * * *'
+   CRON_TZ=Asia/Shanghai TZ=Asia/Shanghai- cron: '0 0 * * *'
 
 jobs:
   deploy:
