@@ -124,7 +124,7 @@ USERS_COVER | config.json中内容
 
 `push`操作会触发工作流运行。
 
-删除掉`README.md`中的😄即可。完成后，每天早上`6:30`将自动完成每日任务。
+删除掉`README.md`中的即可。完成后，每天早上`6:30`将自动完成每日任务。
 
 ![](https://draw-static.vercel.app/UnicomTask/进行一次push操作.gif)
 
