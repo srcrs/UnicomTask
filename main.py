@@ -239,33 +239,7 @@ def day100Integral_task():
         print(traceback.format_exc())
         logging.error('【100定向积分】: 错误，原因为: ' + str(e))
 
-#积分抽奖，可在环境变量中设置抽奖次数，否则每天将只会抽奖一次
-#需要注意的是，配置完抽奖次数，程序每运行一次都将触发积分抽奖，直至达每日30次抽奖用完或积分不够(测试过程中未中过奖)
-#位置: 发现 --> 定向积分 --> 小积分，抽好礼
-def pointsLottery_task(n):
-    try:
-        numjsp = get_encryptmobile()
-        #每日首次免费
-        oneFree = client.post('https://m.client.10010.com/dailylottery/static/integral/choujiang?usernumberofjsp=' + numjsp)
-        oneFree.encoding = 'utf-8'
-        res1 = oneFree.json()
-        logging.info("【积分抽奖】: " + res1['RspMsg'] + ' x免费')
-        #如果用户未设置此值，将不会自动抽奖
-        #预防用户输入30以上，造成不必要的抽奖操作
-        num = min(30,int(n))
-        for i in range(num):
-            #用积分兑换抽奖机会
-            client.get('https://m.client.10010.com/dailylottery/static/integral/duihuan?goldnumber=10&banrate=30&usernumberofjsp=' + numjsp)
-            #进行抽奖
-            payx = client.post('https://m.client.10010.com/dailylottery/static/integral/choujiang?usernumberofjsp=' + numjsp + '&flag=convert')
-            payx.encoding = 'utf-8'
-            res2 = payx.json()
-            logging.info("【积分抽奖】: " + res2['RspMsg'] + ' x' + str(i+1))
-            #等待随机秒钟
-            time.sleep(1)
-    except Exception as e:
-        print(traceback.format_exc())
-        logging.error('【积分抽奖】: 错误，原因为: ' + str(e))
+
 
 #冬奥积分活动，第1和7天，可领取600定向积分，其余领取300定向积分,有效期至下月底
 #位置: 发现 --> 定向积分 --> 每日领积分超值兑东奥特许商品
@@ -297,28 +271,6 @@ def dongaoPoints_task():
         print(traceback.format_exc())
         logging.error('【东奥积分活动】: 错误，原因为: ' + str(e))
 
-#每日1G流量日包领取
-#位置: 签到 --> 免费领 -->  免费领流量
-def dayOneG_Task():
-    try:
-        #观看视频任务
-        client.post('https://act.10010.com/SigninApp/doTask/finishVideo')
-        #请求任务列表
-        getTaskInfo = client.post('https://act.10010.com/SigninApp/doTask/getTaskInfo')
-        getTaskInfo.encoding = 'utf-8'
-        getPrize = client.post('https://act.10010.com/SigninApp/doTask/getPrize')
-        getPrize.encoding = 'utf-8'
-        client.post('https://act.10010.com/SigninApp/doTask/getTaskInfo')
-        res1 = getTaskInfo.json()
-        res2 = getPrize.json()
-        if(res1['data']['taskInfo']['status'] == '1'):
-            logging.info('【1G流量日包】: ' + res2['data']['statusDesc'])
-        else:
-            logging.info('【1G流量日包】: ' + res1['data']['taskInfo']['btn'])
-        time.sleep(1)
-    except Exception as e:
-        print(traceback.format_exc())
-        logging.error('【1G流量日包】: 错误，原因为: ' + str(e))
 
 
 #读取用户配置信息
@@ -495,21 +447,6 @@ def check():
         logging.info('【娱乐中心任务】: 触发防刷，跳过')
         return False
 
-#每月领取1G流量包，仅限湖北用户
-#位置：暂时不清楚
-def monthOneG(username):
-    #获取当前是本月几号
-    now = getTimezone()
-    timeArray = time.localtime(now)
-    day = time.strftime("%d",timeArray)
-    ## 联通活动 不需要登录
-    url = f'https://wap.10010hb.net/zinfo/activity/mobilePrize/getAward?serialNumber={username}'
-    #每月3号领取
-    if day==3:
-        award = client.post(url,'{}')
-        award.encoding = 'utf-8'
-        res = award.json()
-        logging.info('【每月领取1G】: ' + res['alertMsg'])
 
 #腾讯云函数入口
 def main(event, context):
