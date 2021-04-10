@@ -297,28 +297,7 @@ def dongaoPoints_task():
         print(traceback.format_exc())
         logging.error('【东奥积分活动】: 错误，原因为: ' + str(e))
 
-#每日1G流量日包领取
-#位置: 签到 --> 免费领 -->  免费领流量
-def dayOneG_Task():
-    try:
-        #观看视频任务
-        client.post('https://act.10010.com/SigninApp/doTask/finishVideo')
-        #请求任务列表
-        getTaskInfo = client.post('https://act.10010.com/SigninApp/doTask/getTaskInfo')
-        getTaskInfo.encoding = 'utf-8'
-        getPrize = client.post('https://act.10010.com/SigninApp/doTask/getPrize')
-        getPrize.encoding = 'utf-8'
-        client.post('https://act.10010.com/SigninApp/doTask/getTaskInfo')
-        res1 = getTaskInfo.json()
-        res2 = getPrize.json()
-        if(res1['data']['taskInfo']['status'] == '1'):
-            logging.info('【1G流量日包】: ' + res2['data']['statusDesc'])
-        else:
-            logging.info('【1G流量日包】: ' + res1['data']['taskInfo']['btn'])
-        time.sleep(1)
-    except Exception as e:
-        print(traceback.format_exc())
-        logging.error('【1G流量日包】: 错误，原因为: ' + str(e))
+
 
 
 #读取用户配置信息
@@ -456,44 +435,7 @@ def actionFlow(username):
     if flag:
         logging.info('【即将过期流量包】: 暂无')
 
-#防刷校验
-def check():
-    client.headers.update({'referer': 'https://img.client.10010.com'})
-    client.headers.update({'origin': 'https://img.client.10010.com'})
-    data4 = {
-        'methodType': 'queryTaskCenter',
-        'taskCenterId': '',
-        'videoIntegral': '',
-        'isVideo': '',
-        'clientVersion': '8.0100',
-        'deviceType': 'Android'
-    }
-    #在此之间验证是否有防刷校验
-    taskCenter = client.post('https://m.client.10010.com/producGameTaskCenter', data=data4)
-    taskCenter.encoding = 'utf-8'
-    taskCenters = taskCenter.json()
-    gameId = ''
-    for t in taskCenters['data']:
-        if t['task_title'] == '宝箱任务':
-            gameId = t['game_id']
-            break
-    data5 = {
-        'userNumber': 'queryTaskCenter',
-        'methodType': 'flowGet',
-        'gameId': gameId,
-        'clientVersion': '8.0100',
-        'deviceType': 'Android'
-    }
-    producGameApp = client.post('https://m.client.10010.com/producGameApp',data=data5)
-    producGameApp.encoding = 'utf-8'
-    res = producGameApp.json()
-    client.headers.pop('referer')
-    client.headers.pop('origin')
-    if res['code'] == '9999':
-        return True
-    else:
-        logging.info('【娱乐中心任务】: 触发防刷，跳过')
-        return False
+
 
 #每月领取1G流量包，仅限湖北用户
 #位置：暂时不清楚
