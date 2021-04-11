@@ -112,7 +112,7 @@ def luckDraw_task():
 def gameCenterSign_Task(username):
     data1 = {
         'methodType': 'signin',
-        'clientVersion': '8.0100',
+        'clientVersion': '8.6200',
         'deviceType': 'Android'
     }
     data2 = {
@@ -121,11 +121,11 @@ def gameCenterSign_Task(username):
         'deviceType': 'iOS'
     }
     try:
-        client.get('https://img.client.10010.com/gametask/index.html?yw_code=&desmobile='+username+'&version=android@8.0100')
+        client.get('https://img.client.10010.com/gametask/index.html?yw_code=&desmobile='+username+'&version=android@8.6200')
         time.sleep(2)
         headers = {
             'origin': 'https://img.client.10010.com',
-            'referer': 'https://img.client.10010.com/gametask/index.html?yw_code=&desmobile='+username+'&version=android@8.0100'
+            'referer': 'https://img.client.10010.com/gametask/index.html?yw_code=&desmobile='+username+'&version=android@8.6200'
         }
         client.headers.update(headers)
         #进行游戏中心签到
@@ -163,14 +163,14 @@ def openBox_task():
     data2 = {
         'methodType': 'reward',
         'deviceType': 'Android',
-        'clientVersion': '8.0100',
+        'clientVersion': '8.6200',
         'isVideo': 'N'
     }
     param = '?methodType=taskGetReward&taskCenterId=187&clientVersion=8.0100&deviceType=Android'
     data3 = {
         'methodType': 'reward',
         'deviceType': 'Android',
-        'clientVersion': '8.0100',
+        'clientVersion': '8.6200',
         'isVideo': 'Y'
     }
     try:
