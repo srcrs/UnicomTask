@@ -493,11 +493,10 @@ def main(event, context):
                 pointsLottery_task(0)
             day100Integral_task()
             dongaoPoints_task()
-            
-            gameCenterSign_Task(user['username'])
-            openBox_task()
             collectFlow_task()
             woTree_task()
+            gameCenterSign_Task(user['username'])
+            openBox_task()
             actionFlow(user['username'])
             monthOneG(user['username'])
         if ('email' in user) :
