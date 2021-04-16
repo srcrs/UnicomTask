@@ -18,13 +18,14 @@
         "enterpriseWechat": {
             "id": "企业ID（选填，不填请删除 enterpriseWechat 对象）",
             "agentld": "企业微信自建应用AgentId（选填，不填请删除 enterpriseWechat 对象）",
-            "secret": "企业微信自建应用Secrets（选填不填请删除 enterpriseWechat 对象）"
+            "secret": "企业微信自建应用Secrets（选填，不填请删除 enterpriseWechat 对象）"
         },
         "IFTTT": {
             "apiKey": "IFTTT Webhook key",
             "eventName": "unicom_task",
             "subjectKey": "比如value1",
             "contentKey": "比如value2"
-        }
+        },
+        "autoKingCardType": "自动续约王卡福利二选一 1 代表通话分钟 2 代表流量（选填，不填请删除）"
     }
 ]
