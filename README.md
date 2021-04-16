@@ -10,7 +10,7 @@
 </div>
 
 # 简介
-update now
+update just now
 
 👯✨😄📫
 
