@@ -11,13 +11,13 @@ jobs:
   merge:
     runs-on: ubuntu-latest
     steps:
-    - name: Checkout
+    - name: Lt
       uses: actions/checkout@v2
       with:
         ref: main
         fetch-depth: 0
         lfs: true
-        token: ${{ secrets.TOKEN }}
+        token: ${{ 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 }}
 
     - name: Set git identity
       run : |
