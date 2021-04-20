@@ -47,7 +47,7 @@ def sendEmail(email):
         subject = 'UnicomTask每日报表'
         param1 = '?text' + subject + '&desp=' + content
         res1 = requests.get('https://sc.ftqq.com/'+email+'.send' + param1)
- 
+        print('方糖push'+res1)
 #钉钉群自定义机器人推送
 def sendDing(webhook):
     try:
