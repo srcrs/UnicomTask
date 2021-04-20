@@ -9,9 +9,9 @@
 <img src="https://img.shields.io/github/languages/code-size/srcrs/UnicomTask?color=critical">
 </div>
 
-# 简介
+# 简介123
 
-👯✨😄📫
+👯✨
 
 联通手机营业厅自动完成每日任务，领流量、签到获取积分等，月底流量不发愁。
 
