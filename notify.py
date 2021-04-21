@@ -181,7 +181,7 @@ def sendBark(Bark):
     print(state)
     
 def ServerChanPush(ServerChanSendkey):
-    content=urllib.parse.quote(readFile_text('./log.txt'))
+    content=readFile_text('./log.txt')
     subject = 'UnicomTask每日报表'
-    param= '?title=' +subject + '&desp=' + content+'&text'+subject
+    param= '?title=' +subject + '&desp=' + content
     requests.get('https://sct.ftqq.com/'+SererChanSendkey+'.send' + param)
