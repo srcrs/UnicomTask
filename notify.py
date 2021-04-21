@@ -182,6 +182,12 @@ def sendBark(Bark):
     
 def ServerChanPush(ServerChanSendkey):
     content=readFile_text('./log.txt')
-    subject = 'UnicomTask每日报表'
-    param= '?title=' +subject + '&desp=' + content
-    requests.get('https://sct.ftqq.com/'+SererChanSendkey+'.send' + param)
+    data = {
+        "title": "UnicomTask每日报表",
+        "text": "UnicomTask每日报表",
+        "desp": content
+    }
+    url=f'https://sct.ftqq.com/{ServerChanSendkey}.send'
+    headers = {'Content-Type': 'application/json;charset=utf-8'}
+    session = requests.Session()
+    session.post(url, json = data, headers = headers)
