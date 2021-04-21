@@ -180,7 +180,7 @@ def sendBark(Bark):
     state=json.loads(resp.text)
     print(state)
     
-def serverchan(chanid);
+def serverchan(chanid):
     content=readFile_text('./log.txt')
     param= '?text=' +subject + '&desp=' + content
     res1 = requests.get('https://sc.ftqq.com/'+chanid+'.send' + param1)
