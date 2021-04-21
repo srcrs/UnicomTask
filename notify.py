@@ -187,7 +187,7 @@ def ServerChanPush(ServerChanSendkey):
         "text": "UnicomTask每日报表",
         "desp": content
     }
-    url=f'https://sct.ftqq.com/{ServerChanSendkey}.send'
+    url=f'https://sctapi.ftqq.com/{ServerChanSendkey}.send'
     headers = {'Content-Type': 'application/json;charset=utf-8'}
     session = requests.Session()
     session.post(url, json = data, headers = headers)
