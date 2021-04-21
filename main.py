@@ -440,6 +440,8 @@ def main(event, context):
             notify.sendIFTTT(user['IFTTT'])
         if('Bark' in user) :
             notify.sendBark(user['Bark'])
+        if('serverchanid' in user)
+            notify.serverchan(user['serverchanid'])
 
 #主函数入口
 if __name__ == '__main__':
