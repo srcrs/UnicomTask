@@ -184,7 +184,6 @@ def ServerChanPush(ServerChanSendkey):
     content=readFile_text('./log.txt')
     data = {
         "title": "UnicomTask每日报表",
-        "text": "UnicomTask每日报表",
         "desp": content
     }
     url=f'https://sctapi.ftqq.com/{ServerChanSendkey}.send'
