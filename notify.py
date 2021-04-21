@@ -184,5 +184,4 @@ def serverchan(chanid):
     content=readFile_text('./log.txt')
     subject = 'UnicomTask每日报表'
     param= '?text=' +subject + '&desp=' + content
-    res = requests.get('https://sc.ftqq.com/'+chanid+'.send' + param)
-    print('serverChan:'+res)
+    requests.get('https://sc.ftqq.com/'+chanid+'.send' + param)
