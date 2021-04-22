@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*-
+*# -*- coding: utf-8 -*-
 # @Time    : 2021/2/23 06:30
 # @Author  : srcrs
 # @Email   : srcrs@foxmail.com
@@ -182,6 +182,6 @@ def sendBark(Bark):
     
 def ServerChanPush(ServerChanSendkey):
     content=readFile_text('./log.txt')
-    subject = 'UnicomTask每日报表'
+    subject = user['username']+'UnicomTask每日报表'
     param= '?title=' +subject + '&desp=' + content
     requests.get('https://sctapi.ftqq.com/'+ServerChanSendkey+'.send' + param)
