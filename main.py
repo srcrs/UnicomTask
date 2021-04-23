@@ -385,23 +385,19 @@ def autoKingCardWelfare(upgradeType):
     data = {
         'upgradeType': upgradeType
     }
-    arr = {
-        1 : "100分钟通话",
-        2 : "1G流量月包"
-    }
-    #每月4号领取
+    #每月3号领取
     if day==3:
         stat = client.post(url,data=data)
         stat.encoding = 'utf-8'
         stat = stat.json()
         try:
-            if len(stat['content']) != 0:
-                if 'ok' == stat['msg']:
-                    logging.info('【王卡福利续约】: 成功, ' + arr[upgradeType])
+            if stat['msg'] == 'ok':
+                if len(stat['content']) != 0:
+                    logging.info('【王卡福利续约】: 成功, ' + stat['content'])
                 else:
-                    logging.info('【王卡福利续约】: 失败, ' + stat['msg'])
+                    logging.info('【王卡福利续约】: 失败')
             else:
-                logging.info('【王卡福利续约】: 失败, ' + stat['msg'])
+                logging.info('【王卡福利续约】: 失败, ' + stat['msgStr'])
         except Exception as e:
             print(traceback.format_exc())
             logging.error('【王卡福利续约】: 错误, ' + stat['msgStr'])
