@@ -1,6 +1,8 @@
 name: UnicomTask
 
 on:
+  push:
+    branches: main
   gollum:
   workflow_dispatch:
   schedule:
