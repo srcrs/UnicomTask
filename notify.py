@@ -138,18 +138,45 @@ def sendWechat(wex):
     access_token = token_data['access_token']
     #发送内容
     content = readFile_text('./log.txt')
-    #创建要发送的消息
-    data = {
-        "touser": "@all",
-        "msgtype": "text",
-        "agentid": wex['agentld'],
-        "text": {"content": content}
-    }
-    send_url = 'https://qyapi.weixin.qq.com/cgi-bin/message/send?access_token=' + access_token
-    message = requests.post(send_url,json=data)
-    message.encoding = 'utf-8'
-    res = message.json()
-    print('Wechat send : ' + res['errmsg'])
+    html = content.replace('\n', '<br/>')
+    if not wex['thumb_media_id']:
+        #创建发送文本消息内容
+        data = {
+            "touser": "@all",
+            "msgtype": "text",
+            "agentid": wex['agentld'],
+            "text": {"content": content}
+        }
+        send_url = 'https://qyapi.weixin.qq.com/cgi-bin/message/send?access_token=' + access_token
+        message = requests.post(send_url,json=data)
+        message.encoding = 'utf-8'
+        res = message.json()
+        print('Wechat send : ' + res['errmsg'])
+    else:
+        #创建发送图文消息内容
+        data = {
+            "touser": "@all",
+            "msgtype": "mpnews",
+            "agentid": wex['agentld'],
+            "mpnews": {
+                    "articles" : [
+                    {
+                    "title" : 'UnicomTask每日报表',
+                    "thumb_media_id" : wex['thumb_media_id'],
+                    "author" : wex['author'],
+                    "content_source_url": "",
+                    "content" : html,
+                    "digest": content
+                    }
+                    ]
+            }
+        }
+        send_url = 'https://qyapi.weixin.qq.com/cgi-bin/message/send?access_token=' + access_token
+        message = requests.post(send_url,json=data)
+        message.encoding = 'utf-8'
+        res = message.json()
+        print('Wechat send : ' + res['errmsg'])
+        
 
 #发送IFTTT通知
 def sendIFTTT(ifttt):

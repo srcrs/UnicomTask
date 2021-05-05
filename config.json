@@ -18,7 +18,9 @@
         "enterpriseWechat": {
             "id": "企业ID（选填，不填请删除 enterpriseWechat 对象）",
             "agentld": "企业微信自建应用AgentId（选填，不填请删除 enterpriseWechat 对象）",
-            "secret": "企业微信自建应用Secrets（选填，不填请删除 enterpriseWechat 对象）"
+            "secret": "企业微信自建应用Secrets（选填，不填请删除 enterpriseWechat 对象）",
+            "author": "图文消息作者名字，如果选择推送企业微信图文消息则必须填写",
+            "thumb_media_id": "注意：如果不填写留空那么将继续推送文本消息而不是图文消息   图文消息，图片id，登录企业微信之后在素材哭上传图片之后点击下载链接查看，其中有media_id=xxxxxxx 以&结尾"
         },
         "IFTTT": {
             "apiKey": "IFTTT Webhook key",
