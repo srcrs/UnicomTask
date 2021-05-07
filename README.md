@@ -23,7 +23,7 @@
 - [目录](#目录)
 - [功能](#功能)
 - [使用方式](#使用方式)
-  - [Github Actions（推荐）](#github-actions推荐)
+  - [Github Actions（去除）](#github-actions推荐)
     - [1.fork本项目](#1fork本项目)
     - [2.准备需要的参数](#2准备需要的参数)
     - [3.将参数填到Secrets](#3将参数填到secrets)
@@ -58,8 +58,9 @@
 
 # 使用方式
 
-## Github Actions（推荐）
+## Github Actions（去除）
 
+～～
 ### 1.fork本项目
 
 项目地址：[srcrs/UnicomTask](https://github.com/srcrs/UnicomTask)
@@ -128,7 +129,7 @@ USERS_COVER | config.json中内容
 
 删除掉`README.md`中的😄即可。完成后，每天早上`6:30`将自动完成每日任务。
 
-![](https://draw-static.vercel.app/UnicomTask/进行一次push操作.gif)
+![](https://draw-static.vercel.app/UnicomTask/进行一次push操作.gif)～～
 
 ## 腾讯云函数（推荐）
 
