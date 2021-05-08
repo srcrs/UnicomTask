@@ -1,9 +1,9 @@
 [
     {
-        "username": "18676568837",
-        "password": "521007",
+        "username": "18676568837"
+        "password": "521007"
         "appId": "247b001385de5cc6ce11731ba1b158351342f5accbe66ceccfff3e93e353c8b76f4250a0405eee6caaa0cf3df0047575765a532247c896d0d6fc453e26ab017c682dbe4244a6869d58e61a8e1c46b822",
-              "lotteryNum": "3",
+              "lotteryNum": "3"
         "dingtalkWebhook": "钉钉通知 https://oapi.dingtalk.com/robot/send?access_token=xxxx（选填，不填请删除此行）",
         "Bark": {
             "Barkkey": "（选填，不填请删除 Bark 对象）",
